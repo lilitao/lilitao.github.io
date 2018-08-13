@@ -20,6 +20,12 @@ public void should_pring_success_given_list(){
    assertThat(result).contains("milk","book");
 } 
 ```
+It is just plain java method with a test annotation on it.
+
+It should have three standard parts, given, when, then, the given part prepares the precondition of the test, the when part call the method to be tested, and the then part just verifies if the result is as expected. 
+
+When used in project, the comments of given, when, then in the above example should not be added, for it is just for educating purpose.
+
 
 ## compare UT with other tests
 
@@ -51,13 +57,17 @@ There are lots of tests in this industry, in the above picture, we can see them 
 4. The right quadrants(Q3, Q4) are for verifying the quality of the system as whole by involing test team or user to do the test
 
 
-## why to write UT
+## why bother to write UT
 
-test
 
 ### brain overload
 
-test
+Many developer may feel that programming is wearing .One of the main reason is , when programming ,we need to maintain the logic in a consistent state . If the functionality is big . our brain needs to scan again and again if logic are consistent , which drains our mind energy dramatically. 
+
+In a modern psychology research, normal human beings can hold only 7 logic aspects in consistency, but 7 is small comparing to a programmer's daily work.
+
+And unit test expecially TDD can effectively split the problem area into small aspect, and the programmer just needs to focus on the current small step's problem, which obviously relieve the spirit burdon of the programmer.
+
 
 ### shotgun change
 
