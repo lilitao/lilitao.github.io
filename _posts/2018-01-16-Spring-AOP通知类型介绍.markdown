@@ -142,4 +142,5 @@ categories: translate
 总结
 在这篇文单里，我们学习了Spring中的不同类型的通知和这些通知的声明和实现方式。我们使用基于模式定义的方法和java注解来定义切面。我们提供了几种合适的通知应用场景。
 
-上面所有的例子实现和代码可以在原作者的github里找到：https://github.com/eugenp/tutorials/tree/master/spring-mvc-java ，那是基于eclipse的工程结构，所以很容易导入和运行。
+上面所有的例子实现和代码可以在原作者的github里找到：https://github.com/eugenp/tutorials/tree/master/spring-mvc-java ，那是基于eclipse的工程结构，所以很容易导入和运行。 
+ 
