@@ -41,5 +41,3 @@ plugins:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
-markdown: kramdown
-toc_levels: 1..2
