@@ -7,6 +7,8 @@ categories: translate
 
 原文地址：http://www.baeldung.com/spring-aop-pointcut-tutorial
 
+上一篇:{{ site.baseurl }}{% post_url 2018-01-16-Spring-AOP通知类型介绍 %}
+
 #概括
 
 这遍文章将介绍Spring AOP切点表达式(下称表达式)语言，首先介绍两个面向切面编程中使用到的术语。
