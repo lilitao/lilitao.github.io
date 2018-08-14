@@ -54,6 +54,6 @@ verify(mockedList).get(0);
 ```
 
 1. 默认情况下，所有mock实例的方法都会有一个默认的返回值:null、基本类型/基本包装类型、一个空的集合。mockito自动判断什么情况下使用哪种返回值，比如：int/Integer 返回0 ; boolean/Boolean 返回false
-2. 
+2. stubbing是可以被覆盖的，例如，你可以把common的stubbing代码抽出来统一初始化，在具体某个test case再覆盖某个stubbing。但是需要注意的是：这些common的stubbing代码被覆盖太多的话，有可能是潜在的代码坏味道。
 
 ### Argument matchers
