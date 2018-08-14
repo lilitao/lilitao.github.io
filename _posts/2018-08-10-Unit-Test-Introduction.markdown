@@ -71,20 +71,22 @@ And unit test expecially TDD can effectively split the problem area into small a
 
 ### shotgun change
 
-test
+![shotgun-change]({{ site.url }}/assets/image-shotgun-chnage.png "shotgun change")
+
+We usually find ourself in a situation that some requirements changing  will impact many points of different method coding  . and the worse case is that , the modifications of these coding are not the same , No one can be sure of finally changing these code will not incur any defect , Though system covered by automatic tests do not suffered to this problem .  
 
 ### broken safenet
 
-test
+![broken safenet]({{ site.url }}/assets/image-broken-safenet.png "broken safenet")
 
 ### hard to hit the root cause of the problem
 
-test
+![hard to hit root cause]({{ site.url }}/assets/image-hit-cause.png "broken safenet")
 
 ### high risk to make change
 
-test
+![risky]({{ site.url }}/assets/image-risky.png "high risk")
 
 ## the ROI of automation change
 
-testddd
+![roi]({{ site.url }}/assets/image-roi.png "roi")
