@@ -39,12 +39,12 @@ When used in project, the comments of given, when, then in the above example sho
 ### compare unit test with service test and UI test
 
 
-![unit-test-compare-with-other-tests]({{ site.url }}/assets/image-unit-test.png "unit test compare with other tests")
+![unit-test-compare-with-other-tests]({{ site.url }}/assets/images/image-unit-test.png "unit test compare with other tests")
 
 Unit tests usually tests the functionality olny includes POJO and is the faster , A unit test's cover range is small . The numbers of unit tests is the bigger . the coverage can give is high
 The other types of test  , including service test and UI test , can only provide  limited coverage rate , and their coast are higher , so their amount is relatively smaller , and they are run slowly , so they can not give a feedback quickly to the developer.
 
-![business/technology facing]({{ site.url }}/assets/unit-test-business-facing.jpg "business technology facing")
+![business/technology facing]({{ site.url }}/assets/images/unit-test-business-facing.jpg "business technology facing")
 
 There are lots of tests in this industry, in the above picture, we can see them classified in four quadrants. 
 
@@ -71,22 +71,22 @@ And unit test expecially TDD can effectively split the problem area into small a
 
 ### shotgun change
 
-![shotgun-change]({{ site.url }}/assets/image-shotgun-chnage.png "shotgun change")
+![shotgun-change]({{ site.url }}/assets/images/image-shotgun-chnage.png "shotgun change")
 
 We usually find ourself in a situation that some requirements changing  will impact many points of different method coding  . and the worse case is that , the modifications of these coding are not the same , No one can be sure of finally changing these code will not incur any defect , Though system covered by automatic tests do not suffered to this problem .  
 
 ### broken safenet
 
-![broken safenet]({{ site.url }}/assets/image-broken-safenet.png "broken safenet")
+![broken safenet]({{ site.url }}/assets/images/image-broken-safenet.png "broken safenet")
 
 ### hard to hit the root cause of the problem
 
-![hard to hit root cause]({{ site.url }}/assets/image-hit-cause.png "broken safenet")
+![hard to hit root cause]({{ site.url }}/assets/images/image-hit-cause.png "broken safenet")
 
 ### high risk to make change
 
-![risky]({{ site.url }}/assets/image-risky.png "high risk")
+![risky]({{ site.url }}/assets/images/image-risky.png "high risk")
 
 ## the ROI of automation change
 
-![roi]({{ site.url }}/assets/image-roi.png "roi")
+![roi]({{ site.url }}/assets/images/image-roi.png "roi")
