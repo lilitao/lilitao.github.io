@@ -16,7 +16,7 @@
 title: 李立涛
 email: 43850338@qq.com
 description: >- # this means to ignore newlines until "baseurl:"
-   an awesome site for my sharing
+    Welcome to My Blog
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: jekyllrb
