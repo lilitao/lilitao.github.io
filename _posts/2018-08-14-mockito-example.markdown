@@ -59,3 +59,13 @@ verify(mockedList).get(0);
 4. 对同一个方法，用相同的参数stubbing，以最后一次以准。
 
 ### Argument matchers
+
+当我们对某个方法构建stubbing时，需要指定传入参数来定义来返回特定stubbed对象 , 当test case调用stubbing方法时，mockito据实际传入的传参数来判断需要返回哪个stubbed对象。 mockito使用java内置的equals()方法来对比参数。 但是，有时我们需要再加灵活的参数匹配方式。
+
+```java
+//stubbing使用内置的anyInt()参数匹配器
+when(mockedList.get(andyInt())).thenReturn("object");
+
+
+```
+
