@@ -7,7 +7,7 @@ categories: translate
 
 原文地址：http://www.baeldung.com/spring-aop-pointcut-tutorial
 
-上一篇:{{ site.baseurl }}{% post_url 2018-01-16-Spring-AOP通知类型介绍 %}
+[上一篇]({{ site.baseurl }}{% post_url 2018-01-16-Spring-AOP通知类型介绍 %})
 
 #概括
 

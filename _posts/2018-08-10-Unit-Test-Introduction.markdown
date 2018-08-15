@@ -79,9 +79,15 @@ We usually find ourself in a situation that some requirements changing  will imp
 
 ![broken safenet]({{ site.url }}/assets/images/image-broken-safenet.png "broken safenet")
 
+In many teams , expecially those use waterfall development model , the test team is treated as a safenet , Since having safenet , developer ,even everyone thought of quality should be took over by test team , and thought of test team guarantees the delivery quality , and thought of no one in the group but the test team needed to take responsibility to the final quality of the delivery 
+
+But the real is, the safenet seems has broken holes , and defects leak . Because of as the system evolved , the code base was growing up , more and more supplemental functionality , many requirement has been changed . The coast of fully regression test for each release is becoming more and more expensive and rarer , so it is difficult to avoid defects , Many projects failed or become more and more difficult cause by this delusion of having perfect safenet.   
+
 ### hard to hit the root cause of the problem
 
 ![hard to hit root cause]({{ site.url }}/assets/images/image-hit-cause.png "broken safenet")
+
+In a high coupling system , most time , root cause of defects are hard to find out . Sometime , to setting up the environment to duplicate a error is time consuming . Using TDD, we will be more apt to write system with low coupling(because high coupling make it hard to be tested.), which will be more easy to isolate out the sub-module having defect, and setup scaffold to build the test to reproduce the error. 
 
 ### high risk to make change
 
