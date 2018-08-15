@@ -4,7 +4,7 @@
 # See: https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 layout: default 
 ---
-
+{% include header.html %}
 {% assign trans = site.data.values[site.lan] %}
 {% for post in paginator.posts %}
 <div class="well article">
