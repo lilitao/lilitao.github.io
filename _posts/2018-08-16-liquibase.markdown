@@ -8,7 +8,7 @@ categories: liquibase
 * create a change log file
 * load data from liquibase by csv
 * include change log file into comprehensive file
-* using db.changelog_master.xml file manager change log file
+* using db.changelog_master.xml file to aggregate change log file
 * liquibase.properties
 * liquibase maven plugin
 
@@ -81,3 +81,136 @@ In the same directory with `db.changelog.create.TblLiquibaseTest.xml` , i create
 ```
 
 ### db.changelog_master.xml
+
+Using `db.change.master.xml` to aggregated all change log files for liquibase to maintain database . Also the file should be placed in resources directory . The directory structure like below:
+
+![db.changelog_master.xml]({{ site.url }}/assets/images/liquibase-changelog.master.PNG)
+
+The `db.change.master.xml` content contains many `include` elements to aggregate all change files , like this:
+
+![db.changelog.master.xml]({{ site.url }}/assets/images/liquibase-changelogfile-context.PNG)
+
+Since i create the comprehensive file `db.changelog.TblLiquibaseTest.xml` for familial operation of table `TblLiquibaseTest` DDL , i must supplement below tag statement into `db.change.master.xml`
+
+```xml
+
+<include file="com/axxs/cxxst/pxm/xm/infrastructure/persistence/db.changelog.TblLiquibaseTest.xml"/>
+
+```
+
+### liquibase.properties
+
+Liquibase used properties file to configure running . A `liquibase.properties`  should be placed in resources directory 
+
+![liquibase.properties]({{ site.url }}/assets/images/liquibase-changelog.master.PNG)
+
+ The content of `liquibase.properties`
+
+```properties
+contexts=dbUt
+changeLogFile=db.changelog_pmm_master.xml
+driver: com.microsoft.sqlserver.jdbc.SQLServerDriver
+url: jdbc:sqlserver://localhost:1433;DatabaseName=XXXPOC
+username: sa
+password: ***
+verbose: true
+dropFirst: false
+outputChangeLogFile: db.changelog_pxx_ouput.xml
+
+```
+1. `dropFirst` configure whether delete all table before running 
+
+### liuqibase maven plugin
+
+```xml
+ <plugin>
+   <groupId>org.liquibase</groupId>
+   <artifactId>liquibase-maven-plugin</artifactId>
+   <configuration>
+        <propertyFileWillOverride>true</propertyFileWillOverride>
+        <propertyFile>src/main/resources/liquibase.properties</propertyFile>
+        <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+        <executions>
+              <execution>
+                    <phase>process-resources</phase>
+                    <goals>
+                        <goal>updateSQL</goal>
+                     </goals>
+              </execution>
+         </executions>
+   </configuration>
+</plugin>
+```
+1. Because of using spring boot default liquibase version , i have no specified `version` of `liquibase-maven-plugin` plugin
+2. `propertyFile` specified the `liquibase.properties` location 
+3.  `promptOnNonLocalDatabase` is false will configure that not prompt confirm message when conecting to database
+
+After configure maven plugin ,then you will see the plugin information in `Maven Project` view of `iNTELLIj IDEA`
+
+![maven plugin]({{ site.url }}/assets/images/liquibase-maven-plugin.PNG)
+
+1. `liquibase:update` Run liquibase and applies the database change logs to the databalse direct. Useful as part of the build process.
+2. `liquibase:updateSQL` Generates the SQL that is required to update the database to the current version as spcified in the database change logs .
+
+In real ,since i added `db.changelog.create.TblLiquibaseTest.xml`  to project . but  i do not want to applies the `db.changelog.create.TblLiquibaseTest.xml` to the database direct , i want to generate the SQL script for check and approval before database change log be applied. We can bundle plugin goal `liquibase:updateSQL` to maven phase like above configuration  , and then we run command `mvn package`  to generate the script .
+
+For comparing , i has ran `mvn package` before i composed `db.changelog.create.TblLiquibaseTest.xml` to get the scirpt in the case of no change of database. So i got the scirpt below in the directory `target\liquibase\migrate.sql` :
+
+```sql
+-- *********************************************************************
+-- Update Database Script
+-- *********************************************************************
+-- Change Log: db.changelog_p*m_master.xml
+-- Ran at: 8/16/18 10:23 AM
+-- Against: sa@jdbc:sqlserver://CANW***3X:1433;authenticationScheme=nativeAuthentication;xopenStates=false;sendTimeAsDatetime=true;trustServerCertificate=false;sendStringParametersAsUnicode=true;selectMethod=direct;responseBuffering=adaptive;packetSize=8000;multiSubnetFailover=false;loginTimeout=15;lockTimeout=-1;lastUpdateCount=true;encrypt=false;disableStatementPooling=true;databaseName=COASTPOC;applicationName=Microsoft JDBC Driver for SQL Server;applicationIntent=readwrite;
+-- Liquibase version: 3.6.1
+-- *********************************************************************
+
+USE COASTPOC;
+GO
+
+-- Lock Database
+UPDATE DATABASECHANGELOGLOCK SET LOCKED = 1, LOCKEDBY = 'CAxxxR43X (10.xx.xx.100)', LOCKGRANTED = '2018-08-16T10:23:59.369' WHERE ID = 1 AND LOCKED = 0
+GO
+
+-- Release Database Lock
+UPDATE DATABASECHANGELOGLOCK SET LOCKED = 0, LOCKEDBY = NULL, LOCKGRANTED = NULL WHERE ID = 1
+GO
+
+
+```
+
+The script show that have nothing to do
+
+Then i ran again after i composed the `db.changelog.create.TblLiquibaseTest.xml` , I got the script in the same directory.
+
+```SQL
+-- *********************************************************************
+-- Update Database Script
+-- *********************************************************************
+-- Change Log: db.changelog_p*m_master.xml
+-- Ran at: 8/16/18 4:23 PM
+-- Against: sa@jdbc:sqlserver://CANW**X:1433;authenticationScheme=nativeAuthentication;xopenStates=false;sendTimeAsDatetime=true;trustServerCertificate=false;sendStringParametersAsUnicode=true;selectMethod=direct;responseBuffering=adaptive;packetSize=8000;multiSubnetFailover=false;loginTimeout=15;lockTimeout=-1;lastUpdateCount=true;encrypt=false;disableStatementPooling=true;databaseName=COASTPOC;applicationName=Microsoft JDBC Driver for SQL Server;applicationIntent=readwrite;
+-- Liquibase version: 3.6.1
+-- *********************************************************************
+
+USE COASTPOC;
+GO
+
+-- Lock Database
+UPDATE DATABASECHANGELOGLOCK SET LOCKED = 1, LOCKEDBY = 'CANWKD3**3X (10.*.*.100)', LOCKGRANTED = '2018-08-16T16:23:58.314' WHERE ID = 1 AND LOCKED = 0
+GO
+
+-- Changeset com/aiatss/coast/pmm/mm/infrastructure/persistence/db.changelog.create.TblLiquibaseTest.xml::createtion-com.aiatss.coast.AppTest.LiquibaseTest::AndyLi
+CREATE TABLE TblLiquibaseTest (testId bigint NOT NULL, testName varchar(50), createDate datetime, status char(1), CONSTRAINT PK_TBLLIQUIBASETEST PRIMARY KEY (testId))
+GO
+
+INSERT INTO DATABASECHANGELOG (ID, AUTHOR, FILENAME, DATEEXECUTED, ORDEREXECUTED, MD5SUM, DESCRIPTION, COMMENTS, EXECTYPE, CONTEXTS, LABELS, LIQUIBASE, DEPLOYMENT_ID) VALUES ('createtion-com.aiatss.coast.AppTest.LiquibaseTest', 'AndyLi', 'com/aiatss/coast/pmm/mm/infrastructure/persistence/db.changelog.create.TblLiquibaseTest.xml', GETDATE(), 77, '8:166d6aa5138bc6e4f47c51458761f0ad', 'createTable tableName=TblLiquibaseTest', '', 'EXECUTED', NULL, NULL, '3.6.1', '4407838779')
+GO
+
+-- Release Database Lock
+UPDATE DATABASECHANGELOGLOCK SET LOCKED = 0, LOCKEDBY = NULL, LOCKGRANTED = NULL WHERE ID = 1
+GO
+```
+
+Compaing the script with previous script , we found that a table creaton operation DDL SQL had generated as expected . We can apply the script to database after checking and approval
