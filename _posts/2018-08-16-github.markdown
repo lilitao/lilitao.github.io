@@ -1,0 +1,28 @@
+---
+title: git client connect to github 
+layout: post
+date: 2018-08-16
+categories: github
+---
+
+### 设置代理
+
+```bash
+git config --global https.proxy=xxx.xx.com:端口
+git config --global http.proxy=xxx.xx.com:端口
+git config --global http.sslverify=false
+```
+
+### 设置登录密码
+
+1. 在用户目录建立一个 .git-credentials文件。
+   * windows一般是：c:/Users/username
+   * mac:/Users/username
+   * Linux:/home/username
+2. 在.git-credentials增加以下内容
+   * https://{用户名}:{密码}@github.com
+3. 修改git配置
+
+```bash
+git config --global credential.helper store
+```
