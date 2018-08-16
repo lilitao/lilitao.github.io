@@ -108,7 +108,7 @@ Liquibase used properties file to configure running . A `liquibase.properties`  
 
 ```properties
 contexts=dbUt
-changeLogFile=db.changelog_pmm_master.xml
+changeLogFile=db.changelog_p**m_master.xml
 driver: com.microsoft.sqlserver.jdbc.SQLServerDriver
 url: jdbc:sqlserver://localhost:1433;DatabaseName=XXXPOC
 username: sa
@@ -201,7 +201,7 @@ GO
 UPDATE DATABASECHANGELOGLOCK SET LOCKED = 1, LOCKEDBY = 'CANWKD3**3X (10.*.*.100)', LOCKGRANTED = '2018-08-16T16:23:58.314' WHERE ID = 1 AND LOCKED = 0
 GO
 
--- Changeset com/aia**s/co**t/p*m/*m/infrastructure/persistence/db.changelog.create.TblLiquibaseTest.xml::createtion-com.a**s.c**t.AppTest.LiquibaseTest::AndyLi
+-- Changeset com/a***s/co**t/p*m/*m/infrastructure/persistence/db.changelog.create.TblLiquibaseTest.xml::createtion-com.a**s.c**t.AppTest.LiquibaseTest::AndyLi
 CREATE TABLE TblLiquibaseTest (testId bigint NOT NULL, testName varchar(50), createDate datetime, status char(1), CONSTRAINT PK_TBLLIQUIBASETEST PRIMARY KEY (testId))
 GO
 
@@ -283,4 +283,123 @@ First , create a database change log named as `db.changelog.insert.TblLiquibaseT
 
 ```xml
 
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="insertdata-com.a**s.c**t.AppTest.LiquibaseTest" author="AndyLi">
+        <loadUpdateData tableName="TblLiquibaseTest" primaryKey="testId" file="om/a**ss/c**st/p*m/*m/infrastructure/persistence/TblLiquibaseTest.csv">
+            <column type="NUMERIC" name="testId"></column>
+            <column type="STRING" name="testName"></column>
+            <column name="createDate" type="DATE"></column>
+            <column type="STRING" name="status"></column>
+        </loadUpdateData>
+
+    </changeSet>
+
+</databaseChangeLog>
+
 ```  
+
+Second , create a  csv named as `TblLiquibaseTest.csv` , and place into the same directory as `db.changelog.insert.TblLiquibaseTest.xml` , and composed data into `TblLiquibaseTest.csv` 
+
+```txt
+testId,testName,createDate,status
+1,name-1,2018-08-16,A
+2,name-2,2018-08-16,A
+3,name-3,2018-08-16,A
+
+
+```
+
+Third , add the `db.changelog.insert.TblLiquibaseTest.xml` file path into `db.changelog.TblLiquibaseTest.xml` , let liquibase can locate the database change log
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <include file="com/a**s/c**t/p**m/m**/infrastructure/persistence/db.changelog.create.TblLiquibaseTest.xml"/>
+    <include file="com/a**s/**st/p*m/m*/infrastructure/persistence/db.changelog.insert.TblLiquibaseTest.xml"/>
+</databaseChangeLog>
+``` 
+
+Fourth , run maven command to generate script `mvn package` , and execute the script in database to applies database change log
+
+```sql
+
+-- *********************************************************************
+-- Update Database Script
+-- *********************************************************************
+-- Change Log: db.changelog_p**m_master.xml
+-- Ran at: 8/16/18 7:14 PM
+-- Against: sa@jdbc:sqlserver://CANWKD3GTR43X:1433;authenticationScheme=nativeAuthentication;xopenStates=false;sendTimeAsDatetime=true;trustServerCertificate=false;sendStringParametersAsUnicode=true;selectMethod=direct;responseBuffering=adaptive;packetSize=8000;multiSubnetFailover=false;loginTimeout=15;lockTimeout=-1;lastUpdateCount=true;encrypt=false;disableStatementPooling=true;databaseName=C**TPOC;applicationName=Microsoft JDBC Driver for SQL Server;applicationIntent=readwrite;
+-- Liquibase version: 3.6.1
+-- *********************************************************************
+
+USE C**TPOC;
+GO
+
+-- Lock Database
+UPDATE DATABASECHANGELOGLOCK SET LOCKED = 1, LOCKEDBY = 'CANWKD3GTR43X (10.65.35.100)', LOCKGRANTED = '2018-08-16T19:14:16.857' WHERE ID = 1 AND LOCKED = 0
+GO
+
+-- Changeset com/ai**s/c**t/p**m/**m/infrastructure/persistence/db.changelog.create.TblLiquibaseTest.xml::createtion-com.a**s.c**st.AppTest.LiquibaseTest::AndyLi
+CREATE TABLE TblLiquibaseTest (testId bigint NOT NULL, testName varchar(50), createDate datetime, status char(1), CONSTRAINT PK_TBLLIQUIBASETEST PRIMARY KEY (testId))
+GO
+
+INSERT INTO DATABASECHANGELOG (ID, AUTHOR, FILENAME, DATEEXECUTED, ORDEREXECUTED, MD5SUM, DESCRIPTION, COMMENTS, EXECTYPE, CONTEXTS, LABELS, LIQUIBASE, DEPLOYMENT_ID) VALUES ('createtion-com.ai**s.c**st.AppTest.LiquibaseTest', 'AndyLi', 'com/a**ss/c**t/p**m/**m/infrastructure/persistence/db.changelog.create.TblLiquibaseTest.xml', GETDATE(), 77, '8:166d6aa5138bc6e4f47c51458761f0ad', 'createTable tableName=TblLiquibaseTest', '', 'EXECUTED', NULL, NULL, '3.6.1', '4418057268')
+GO
+
+-- Changeset com/a**s/c**st/p**m/**m/infrastructure/persistence/db.changelog.insert.TblLiquibaseTest.xml::insertdata-com.a**ss.c**st.AppTest.LiquibaseTest::AndyLi
+-- WARNING The following SQL may change each run and therefore is possibly incorrect and/or invalid:
+DECLARE @reccount integer
+SELECT @reccount = count(*) FROM TblLiquibaseTest WHERE testId = 1
+IF @reccount = 0
+BEGIN
+INSERT INTO TblLiquibaseTest (testId, testName, createDate, status) VALUES (1, 'name-1', '2018-08-16', 'A');
+END
+ELSE
+BEGIN
+UPDATE TblLiquibaseTest SET createDate = '2018-08-16', status = 'A', testName = 'name-1' WHERE testId = 1;
+END
+GO
+
+DECLARE @reccount integer
+SELECT @reccount = count(*) FROM TblLiquibaseTest WHERE testId = 2
+IF @reccount = 0
+BEGIN
+INSERT INTO TblLiquibaseTest (testId, testName, createDate, status) VALUES (2, 'name-2', '2018-08-16', 'A');
+END
+ELSE
+BEGIN
+UPDATE TblLiquibaseTest SET createDate = '2018-08-16', status = 'A', testName = 'name-2' WHERE testId = 2;
+END
+GO
+
+DECLARE @reccount integer
+SELECT @reccount = count(*) FROM TblLiquibaseTest WHERE testId = 3
+IF @reccount = 0
+BEGIN
+INSERT INTO TblLiquibaseTest (testId, testName, createDate, status) VALUES (3, 'name-3', '2018-08-16', 'A');
+END
+ELSE
+BEGIN
+UPDATE TblLiquibaseTest SET createDate = '2018-08-16', status = 'A', testName = 'name-3' WHERE testId = 3;
+END
+GO
+
+INSERT INTO DATABASECHANGELOG (ID, AUTHOR, FILENAME, DATEEXECUTED, ORDEREXECUTED, MD5SUM, DESCRIPTION, COMMENTS, EXECTYPE, CONTEXTS, LABELS, LIQUIBASE, DEPLOYMENT_ID) VALUES ('insertdata-com.a**tss.c**st.AppTest.LiquibaseTest', 'AndyLi', 'com/a**tss/c**st/p**m/m**/infrastructure/persistence/db.changelog.insert.TblLiquibaseTest.xml', GETDATE(), 78, '8:5c6743a4503734b3763b0ef1330edccd', 'loadUpdateData tableName=TblLiquibaseTest', '', 'EXECUTED', NULL, NULL, '3.6.1', '4418057268')
+GO
+
+-- Release Database Lock
+UPDATE DATABASECHANGELOGLOCK SET LOCKED = 0, LOCKEDBY = NULL, LOCKGRANTED = NULL WHERE ID = 1
+GO
+
+
+```
