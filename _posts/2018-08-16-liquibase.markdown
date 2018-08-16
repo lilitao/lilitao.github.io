@@ -5,15 +5,15 @@ date: 2018-08-16
 categories: liquibase 
 ---
 * summary
-* create a change log file
-* load data from liquibase by csv
+* create a database change log file
 * include change log file into comprehensive file
 * using db.changelog_master.xml file to aggregate change log file
 * liquibase.properties
 * liquibase maven plugin
+* load data  by csv
 
 
-### create a change log file
+### create a database change log file
 
 In liquibase , using many db change log file for maintaining db meta-data or  structure   , These db change log includes  database operation of DDL , These db change log file would resides in resources directory , like below. 
 
@@ -33,7 +33,7 @@ A change log file is a XML format file . The root element and xml schema is belo
 
 ```
 
-While i want to create a new table named as `TblLiquibaseTest` , then i create a change log xml file named as `db.changelog.create.TblLiquibaseTest.xml` placed into resources directory , The xml content is showing below:
+When i want to create a new table named as `TblLiquibaseTest` , then i create a database change log xml file named as `db.changelog.create.TblLiquibaseTest.xml` placed into resources directory , The xml content is showing below:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -43,7 +43,7 @@ While i want to create a new table named as `TblLiquibaseTest` , then i create a
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="createtion-com.aiatss.coast.AppTest.LiquibaseTest" author="AndyLi">
+    <changeSet id="createtion-com.ai**ss.c**st.AppTest.LiquibaseTest" author="AndyLi">
         <createTable tableName="TblLiquibaseTest">
             <column name="testId" type="java.sql.Types.BIGINT">
                 <constraints nullable="false" primaryKey="true"></constraints>
@@ -59,9 +59,9 @@ While i want to create a new table named as `TblLiquibaseTest` , then i create a
 
 </databaseChangeLog>
 ```
-1. `databaseChangeLog` is the root element of change log xml
+1. `databaseChangeLog` is the root element of database change log xml
 2. `chanageSet` is an operation of DDL
-3. `changeSet.id` `changeSet.author` is a unique identification using by liuqibase to identify which operation has been finished or not .  
+3. `changeSet.id` `changeSet.author` is a unique identification using by liuqibase to identify which operation has been committed or not .  
 
 ### comprehensive file
 
@@ -162,11 +162,11 @@ For comparing , i has ran `mvn package` before i composed `db.changelog.create.T
 -- *********************************************************************
 -- Change Log: db.changelog_p*m_master.xml
 -- Ran at: 8/16/18 10:23 AM
--- Against: sa@jdbc:sqlserver://CANW***3X:1433;authenticationScheme=nativeAuthentication;xopenStates=false;sendTimeAsDatetime=true;trustServerCertificate=false;sendStringParametersAsUnicode=true;selectMethod=direct;responseBuffering=adaptive;packetSize=8000;multiSubnetFailover=false;loginTimeout=15;lockTimeout=-1;lastUpdateCount=true;encrypt=false;disableStatementPooling=true;databaseName=COASTPOC;applicationName=Microsoft JDBC Driver for SQL Server;applicationIntent=readwrite;
+-- Against: sa@jdbc:sqlserver://CANW***3X:1433;authenticationScheme=nativeAuthentication;xopenStates=false;sendTimeAsDatetime=true;trustServerCertificate=false;sendStringParametersAsUnicode=true;selectMethod=direct;responseBuffering=adaptive;packetSize=8000;multiSubnetFailover=false;loginTimeout=15;lockTimeout=-1;lastUpdateCount=true;encrypt=false;disableStatementPooling=true;databaseName=C**TPOC;applicationName=Microsoft JDBC Driver for SQL Server;applicationIntent=readwrite;
 -- Liquibase version: 3.6.1
 -- *********************************************************************
 
-USE COASTPOC;
+USE C**TPOC;
 GO
 
 -- Lock Database
@@ -190,22 +190,22 @@ Then i ran again after i composed the `db.changelog.create.TblLiquibaseTest.xml`
 -- *********************************************************************
 -- Change Log: db.changelog_p*m_master.xml
 -- Ran at: 8/16/18 4:23 PM
--- Against: sa@jdbc:sqlserver://CANW**X:1433;authenticationScheme=nativeAuthentication;xopenStates=false;sendTimeAsDatetime=true;trustServerCertificate=false;sendStringParametersAsUnicode=true;selectMethod=direct;responseBuffering=adaptive;packetSize=8000;multiSubnetFailover=false;loginTimeout=15;lockTimeout=-1;lastUpdateCount=true;encrypt=false;disableStatementPooling=true;databaseName=COASTPOC;applicationName=Microsoft JDBC Driver for SQL Server;applicationIntent=readwrite;
+-- Against: sa@jdbc:sqlserver://CANW**X:1433;authenticationScheme=nativeAuthentication;xopenStates=false;sendTimeAsDatetime=true;trustServerCertificate=false;sendStringParametersAsUnicode=true;selectMethod=direct;responseBuffering=adaptive;packetSize=8000;multiSubnetFailover=false;loginTimeout=15;lockTimeout=-1;lastUpdateCount=true;encrypt=false;disableStatementPooling=true;databaseName=C**TPOC;applicationName=Microsoft JDBC Driver for SQL Server;applicationIntent=readwrite;
 -- Liquibase version: 3.6.1
 -- *********************************************************************
 
-USE COASTPOC;
+USE C**TPOC;
 GO
 
 -- Lock Database
 UPDATE DATABASECHANGELOGLOCK SET LOCKED = 1, LOCKEDBY = 'CANWKD3**3X (10.*.*.100)', LOCKGRANTED = '2018-08-16T16:23:58.314' WHERE ID = 1 AND LOCKED = 0
 GO
 
--- Changeset com/aiatss/coast/pmm/mm/infrastructure/persistence/db.changelog.create.TblLiquibaseTest.xml::createtion-com.aiatss.coast.AppTest.LiquibaseTest::AndyLi
+-- Changeset com/aia**s/co**t/p*m/*m/infrastructure/persistence/db.changelog.create.TblLiquibaseTest.xml::createtion-com.a**s.c**t.AppTest.LiquibaseTest::AndyLi
 CREATE TABLE TblLiquibaseTest (testId bigint NOT NULL, testName varchar(50), createDate datetime, status char(1), CONSTRAINT PK_TBLLIQUIBASETEST PRIMARY KEY (testId))
 GO
 
-INSERT INTO DATABASECHANGELOG (ID, AUTHOR, FILENAME, DATEEXECUTED, ORDEREXECUTED, MD5SUM, DESCRIPTION, COMMENTS, EXECTYPE, CONTEXTS, LABELS, LIQUIBASE, DEPLOYMENT_ID) VALUES ('createtion-com.aiatss.coast.AppTest.LiquibaseTest', 'AndyLi', 'com/aiatss/coast/pmm/mm/infrastructure/persistence/db.changelog.create.TblLiquibaseTest.xml', GETDATE(), 77, '8:166d6aa5138bc6e4f47c51458761f0ad', 'createTable tableName=TblLiquibaseTest', '', 'EXECUTED', NULL, NULL, '3.6.1', '4407838779')
+INSERT INTO DATABASECHANGELOG (ID, AUTHOR, FILENAME, DATEEXECUTED, ORDEREXECUTED, MD5SUM, DESCRIPTION, COMMENTS, EXECTYPE, CONTEXTS, LABELS, LIQUIBASE, DEPLOYMENT_ID) VALUES ('createtion-com.ai**s.c**t.AppTest.LiquibaseTest', 'AndyLi', 'com/a**s/c**st/p*m/*m/infrastructure/persistence/db.changelog.create.TblLiquibaseTest.xml', GETDATE(), 77, '8:166d6aa5138bc6e4f47c51458761f0ad', 'createTable tableName=TblLiquibaseTest', '', 'EXECUTED', NULL, NULL, '3.6.1', '4407838779')
 GO
 
 -- Release Database Lock
@@ -214,3 +214,73 @@ GO
 ```
 
 Compaing the script with previous script , we found that a table creaton operation DDL SQL had generated as expected . We can apply the script to database after checking and approval
+
+For  executing flexibly ,  i can compose tow mavne profiles in `pom.xml` 
+
+```xml
+<profiles>
+    <profile>
+        <id>local</id>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <properties>
+            <liquibase.exec.goal>update</liquibase.exec.goal>
+            <liquibase.exec.prompt>false</liquibase.exec.prompt>
+            <liquibase.db.url>jdbc:oracle:thin:@host:1521:xe</liquibase.db.url>
+            <liquibase.db.user>user</liquibase.db.user>
+            <liquibase.db.password>password</liquibase.db.password>
+        </properties>
+    </profile>
+
+    <profile>
+        <id>uat</id>
+        <properties>
+            <liquibase.exec.goal>updateSQL</liquibase.exec.goal>
+            <liquibase.exec.prompt>true</liquibase.exec.prompt>
+            <liquibase.db.url>jdbc:oracle:thin:@host2:1521:xe</liquibase.db.url>
+            <liquibase.db.user>user2</liquibase.db.user>
+            <liquibase.db.password>password2</liquibase.db.password>
+        </properties>
+    </profile>
+</profiles>
+```
+
+And update the plugin to like below,
+
+```xml
+
+<plugin>
+    <groupId>org.liquibase</groupId>
+    <artifactId>liquibase-maven-plugin</artifactId>
+    <version>3.0.5</version>
+    <configuration>
+        <changeLogFile>src/main/resources/db/liquibase_changeset.xml</changeLogFile>
+        <driver>oracle.jdbc.driver.OracleDriver</driver>
+        <url>${liquibase.db.url}</url>
+        <username>${liquibase.db.user}</username>
+        <password>${liquibase.db.password}</password>
+        <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+    </configuration>
+    <executions>
+        <execution>
+            <phase>process-resources</phase>
+            <goals>
+                <goal>${liquibase.exec.goal}</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+
+```
+
+After above , we can use `mvn insatll -P local` or `mvn install -P uat` in difference envrionment 
+
+### load data by csv
+
+We can use liquibase for loading data into database.
+First , create a database change log named as `db.changelog.insert.TblLiquibaseTest.xml` , and place into the same directory as `db.changelog.create.TblLiquibaseTest.xml` , and the content is below.
+
+```xml
+
+```  
