@@ -1,8 +1,8 @@
 ---
 layout: post
-title: liquibase
+title: liquibase increment SQL script
 date: 2018-08-16
-categories: liquibase
+categories: liquibase 
 ---
 * summary
 * create a change log file
