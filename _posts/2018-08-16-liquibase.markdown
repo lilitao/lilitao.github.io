@@ -338,7 +338,7 @@ Fourth , run maven command to generate script `mvn package` , and execute the sc
 -- *********************************************************************
 -- Change Log: db.changelog_p**m_master.xml
 -- Ran at: 8/16/18 7:14 PM
--- Against: sa@jdbc:sqlserver://CANWKD3GTR43X:1433;authenticationScheme=nativeAuthentication;xopenStates=false;sendTimeAsDatetime=true;trustServerCertificate=false;sendStringParametersAsUnicode=true;selectMethod=direct;responseBuffering=adaptive;packetSize=8000;multiSubnetFailover=false;loginTimeout=15;lockTimeout=-1;lastUpdateCount=true;encrypt=false;disableStatementPooling=true;databaseName=C**TPOC;applicationName=Microsoft JDBC Driver for SQL Server;applicationIntent=readwrite;
+-- Against: sa@jdbc:sqlserver://CAN****43X:1433;authenticationScheme=nativeAuthentication;xopenStates=false;sendTimeAsDatetime=true;trustServerCertificate=false;sendStringParametersAsUnicode=true;selectMethod=direct;responseBuffering=adaptive;packetSize=8000;multiSubnetFailover=false;loginTimeout=15;lockTimeout=-1;lastUpdateCount=true;encrypt=false;disableStatementPooling=true;databaseName=C**TPOC;applicationName=Microsoft JDBC Driver for SQL Server;applicationIntent=readwrite;
 -- Liquibase version: 3.6.1
 -- *********************************************************************
 
@@ -346,7 +346,7 @@ USE C**TPOC;
 GO
 
 -- Lock Database
-UPDATE DATABASECHANGELOGLOCK SET LOCKED = 1, LOCKEDBY = 'CANWKD3GTR43X (10.65.35.100)', LOCKGRANTED = '2018-08-16T19:14:16.857' WHERE ID = 1 AND LOCKED = 0
+UPDATE DATABASECHANGELOGLOCK SET LOCKED = 1, LOCKEDBY = 'CA***43X (10.65.35.100)', LOCKGRANTED = '2018-08-16T19:14:16.857' WHERE ID = 1 AND LOCKED = 0
 GO
 
 -- Changeset com/ai**s/c**t/p**m/**m/infrastructure/persistence/db.changelog.create.TblLiquibaseTest.xml::createtion-com.a**s.c**st.AppTest.LiquibaseTest::AndyLi
