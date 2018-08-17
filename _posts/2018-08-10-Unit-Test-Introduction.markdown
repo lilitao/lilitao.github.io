@@ -93,6 +93,49 @@ In a high coupling system , most time , root cause of defects are hard to find o
 
 ![risky]({{ site.url }}/assets/images/image-risky.png "high risk")
 
+Even though we were  aware that our system have many kinds of problem , and we know we should deal with these problem in one way or another ,for example refactoring that bad code . but no one dare . because of so high coast to do regression test for changing .
+So it is time for us to do something to help ourselves to say good bye to the problem above and have a better career experience 
+
 ## the ROI of automation change
 
 ![roi]({{ site.url }}/assets/images/image-roi.png "roi")
+
+
+## Goals of tests
+
+### improve quality
+
+### understand the SUT(system under test)
+
+### reduce risk
+
+
+## Be easy to write , maintain and run
+
+
+### expressive 
+
+
+### fast
+
+
+### isolated
+
+
+### repeatable 
+
+
+### self-validating
+
+### timely
+
+## Be easy to evolves 
+
+
+### focus on value
+
+### tests should have low overlap
+
+### should not depend on environment 
+
+
