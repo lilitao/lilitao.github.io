@@ -30,7 +30,7 @@ Use above link to find and digging into spring batch data module in database . I
 3. optimistic locking stategy
 4. table structure below
 
-![meta-data-erd.png]({{ site.url }}/assets/meta-data-erd.png)
+![meta-data-erd.png]({{ site.url }}/assets/images/meta-data-erd.png)
 
 the primary table are : batch_job_instance , batch_job_execution , batch_setp_excution make up the overall hierarchy of spring batch data module . 
 
