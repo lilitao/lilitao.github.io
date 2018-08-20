@@ -34,7 +34,7 @@ lan: "en"
 paginate: 8
 highlighter: rouge
 #gEms: [jekyll-paginate]
-#paginate_path: "/usr/local/lib/ruby/gems/2.4.0/gems/jekyll-paginate-1.1.0/"
+
 plugins:
   - jekyll-feed
   - jekyll-paginate
