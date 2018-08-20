@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>spring batch introduction | 李立涛</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="spring batch introduction" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="table of content summary of meta-data table summary of spring batch architecture creation of parallel batch job thread pool creation of synchronous batch job job status job success job fail scheduling task transaction re-run strategy distributed deployment summary of meta-data table Meta-Data table design details refer to : spring docs spring docs Use above link to find and digging into spring batch data module in database . In here , this article ,we will only summarize something must be aware for developer . The initial DDL scripts placed in the packages : org.springfreamework.batch.core of spring-batch-core.xx.jar The spring batch configuration file reside in spring-batch-core.xx.jar named as : batch-xx.properties . you can change the configuration optional according to this file optional optimistic locking stategy table structure below the primary table are : batch_job_instance , batch_job_execution , batch_setp_excution make up the overall hierarchy of spring batch data module . summary of architecture refer to : spring batch docs Use above link for find and digging into design architecture of spring batch , in this sections , will walk you through the summary of spring batch . creation of parallel batch job Go and find the details of parallel job" />
+<meta property="og:description" content="table of content summary of meta-data table summary of spring batch architecture creation of parallel batch job thread pool creation of synchronous batch job job status job success job fail scheduling task transaction re-run strategy distributed deployment summary of meta-data table Meta-Data table design details refer to : spring docs spring docs Use above link to find and digging into spring batch data module in database . In here , this article ,we will only summarize something must be aware for developer . The initial DDL scripts placed in the packages : org.springfreamework.batch.core of spring-batch-core.xx.jar The spring batch configuration file reside in spring-batch-core.xx.jar named as : batch-xx.properties . you can change the configuration optional according to this file optional optimistic locking stategy table structure below the primary table are : batch_job_instance , batch_job_execution , batch_setp_excution make up the overall hierarchy of spring batch data module . summary of architecture refer to : spring batch docs Use above link for find and digging into design architecture of spring batch , in this sections , will walk you through the summary of spring batch . creation of parallel batch job Go and find the details of parallel job" />
+<link rel="canonical" href="http://192.168.2.102:4000/spring/batch/2018/08/15/spring-batch-introduction.html" />
+<meta property="og:url" content="http://192.168.2.102:4000/spring/batch/2018/08/15/spring-batch-introduction.html" />
+<meta property="og:site_name" content="李立涛" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-08-15T00:00:00+08:00" />
+<script type="application/ld+json">
+{"description":"table of content summary of meta-data table summary of spring batch architecture creation of parallel batch job thread pool creation of synchronous batch job job status job success job fail scheduling task transaction re-run strategy distributed deployment summary of meta-data table Meta-Data table design details refer to : spring docs spring docs Use above link to find and digging into spring batch data module in database . In here , this article ,we will only summarize something must be aware for developer . The initial DDL scripts placed in the packages : org.springfreamework.batch.core of spring-batch-core.xx.jar The spring batch configuration file reside in spring-batch-core.xx.jar named as : batch-xx.properties . you can change the configuration optional according to this file optional optimistic locking stategy table structure below the primary table are : batch_job_instance , batch_job_execution , batch_setp_excution make up the overall hierarchy of spring batch data module . summary of architecture refer to : spring batch docs Use above link for find and digging into design architecture of spring batch , in this sections , will walk you through the summary of spring batch . creation of parallel batch job Go and find the details of parallel job","@type":"BlogPosting","url":"http://192.168.2.102:4000/spring/batch/2018/08/15/spring-batch-introduction.html","headline":"spring batch introduction","dateModified":"2018-08-15T00:00:00+08:00","datePublished":"2018-08-15T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://192.168.2.102:4000/spring/batch/2018/08/15/spring-batch-introduction.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://192.168.2.102:4000/feed.xml" title="李立涛" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">李立涛</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">spring batch introduction</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2018-08-15T00:00:00+08:00" itemprop="datePublished">Aug 15, 2018
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="table-of-content">table of content</h2>
+<ul>
+  <li>summary of meta-data table</li>
+  <li>summary of spring batch architecture</li>
+  <li>creation of parallel batch job
+    <ul>
+      <li>thread pool</li>
+    </ul>
+  </li>
+  <li>creation of synchronous batch job</li>
+  <li>job status
+    <ul>
+      <li>job success</li>
+      <li>job fail</li>
+    </ul>
+  </li>
+  <li>scheduling task</li>
+  <li>transaction</li>
+  <li>re-run strategy</li>
+  <li>distributed deployment</li>
+</ul>
+
+<h2 id="summary-of-meta-data-table">summary of meta-data table</h2>
+
+<p>Meta-Data table design details refer to : <a href="https://docs.spring.io/spring-batch/3.0.x/reference/html/metaDataSchema.html">spring docs</a>  <a href="https://docs.spring.io/spring-batch/trunk/reference/html/configureJob.html">spring docs</a></p>
+
+<p>Use above link to find and digging into spring batch data module in database . In here , this article ,we will only summarize something must be aware for developer .</p>
+<ol>
+  <li>The initial DDL scripts placed in the packages : org.springfreamework.batch.core of spring-batch-core.xx.jar</li>
+  <li>The spring batch configuration file reside in spring-batch-core.xx.jar named as : batch-xx.properties . you can change the configuration optional according to this file optional</li>
+  <li>optimistic locking stategy</li>
+  <li>table structure below</li>
+</ol>
+
+<p><img src="http://192.168.2.102:4000/assets/images/meta-data-erd.png" alt="meta-data-erd.png" /></p>
+
+<p>the primary table are : batch_job_instance , batch_job_execution , batch_setp_excution make up the overall hierarchy of spring batch data module .</p>
+
+<h3 id="summary-of-architecture">summary of architecture</h3>
+
+<p>refer to : <a href="http://www.baeldung.com/introduction-to-spring-batch">spring batch docs</a>
+Use above link for find and digging into design architecture of spring batch , in this sections , will walk you through the summary of spring batch .</p>
+
+<h3 id="creation-of-parallel-batch-job">creation of parallel batch job</h3>
+
+<p><a href="https://docs.spring.io/spring-batch/trunk/reference/html/scalability.html#multithreadedStep">Go and find the details of parallel job</a></p>
+
+
+  </div><a class="u-url" href="/spring/batch/2018/08/15/spring-batch-introduction.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">李立涛</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">李立涛</li><li><a class="u-email" href="mailto:43850338@qq.com">43850338@qq.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/jekyll"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jekyll</span></a></li><li><a href="https://www.twitter.com/jekyllrb"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">jekyllrb</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Welcome to My Blog</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -33,9 +33,11 @@ date_format:
 lan: "en" 
 paginate: 8
 highlighter: rouge
-gems: ['jekyll-paginate']
+#gEms: [jekyll-paginate]
+#paginate_path: "/usr/local/lib/ruby/gems/2.4.0/gems/jekyll-paginate-1.1.0/"
 plugins:
   - jekyll-feed
+  - jekyll-paginate
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list

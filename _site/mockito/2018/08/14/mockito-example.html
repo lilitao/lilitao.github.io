@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>mockito example | 李立涛</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="mockito example" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="关于Mockito的例子，翻译自官网：javaDoc mock 下面这个例子mock一个List对象作为演示，实际上，请不要mock一个List,尽量使用一个真实的List对象来完成我们的测试用例 。 //为了使代码更加整洁可读，把Mockito类静态方法都引入来。 import static org.mockito.Mockito.*; //生成一个mock实例 List mockedList = mock(List.class); //使用mock实例 mockedList.add(&quot;one&quot;); mockedList.clear(); //验证 verify(mockedList).add(&quot;one&quot;); verify(mockedList).clear(); 一旦创建一个mock实例，这个mock实例会记录所有与外部对象之间的交互过程，包括：方法调用、传入参数、调用次数等等。在这些基础上，你可以选择验证你所期望的交互。 stubbing //类和接口都可以mock LinkedList mockedList = mock(LindList.class); //stubbing when(mockedList.get(0).thenReturn(&quot;first&quot;); when(mockedList.get(1).thenReturn(new RuntimeException()); //打印查看结果:&quot;first&quot; System.out.println(mockedList.get(0)); //下面语句会抛出一个runtime excpetion System.out.println(mockedList.get(1)); //下面语句会打印&quot;null&quot;,因为我们没有为get(999)提供stub System.out.println(mockedList.get(999)); //通常不需要验证一个stubbed的调用 //stubbed的前提是，你的测试代码需要关注并基于get(0)的返回值继续运行，如果你的代码不需要关注get(0)的返回值，则不需要stubbed verify(mockedList).get(0); 默认情况下，所有mock实例的方法都会有一个默认的返回值:null、基本类型/基本包装类型、一个空的集合。mockito自动判断什么情况下使用哪种返回值，比如：int/Integer 返回0 ; boolean/Boolean 返回false stubbing是可以被覆盖的，例如，你可以把common的stubbing代码抽出来统一初始化，在具体某个test case再覆盖某个stubbing。但是需要注意的是：这些common的stubbing代码被覆盖太多的话，有可能是潜在的代码坏味道。 一旦对某个mock方法stubbed后，那么这个方法调用总是返回一个stubbed值，不管调用多少次，都会返回固定的stubbed值。 对同一个方法，用相同的参数stubbing，以最后一次以准。 Argument matchers 当我们对某个方法构建stubbing时，需要指定传入参数来定义来返回特定stubbed对象 , 当test case调用stubbing方法时，mockito据实际传入的传参数来判断需要返回哪个stubbed对象。 mockito使用java内置的equals()方法来对比参数。 但是，有时我们需要再加灵活的参数匹配方式。 //stubbing使用内置的anyInt()参数匹配器 when(mockedList.get(andyInt())).thenReturn(&quot;object&quot;);" />
+<meta property="og:description" content="关于Mockito的例子，翻译自官网：javaDoc mock 下面这个例子mock一个List对象作为演示，实际上，请不要mock一个List,尽量使用一个真实的List对象来完成我们的测试用例 。 //为了使代码更加整洁可读，把Mockito类静态方法都引入来。 import static org.mockito.Mockito.*; //生成一个mock实例 List mockedList = mock(List.class); //使用mock实例 mockedList.add(&quot;one&quot;); mockedList.clear(); //验证 verify(mockedList).add(&quot;one&quot;); verify(mockedList).clear(); 一旦创建一个mock实例，这个mock实例会记录所有与外部对象之间的交互过程，包括：方法调用、传入参数、调用次数等等。在这些基础上，你可以选择验证你所期望的交互。 stubbing //类和接口都可以mock LinkedList mockedList = mock(LindList.class); //stubbing when(mockedList.get(0).thenReturn(&quot;first&quot;); when(mockedList.get(1).thenReturn(new RuntimeException()); //打印查看结果:&quot;first&quot; System.out.println(mockedList.get(0)); //下面语句会抛出一个runtime excpetion System.out.println(mockedList.get(1)); //下面语句会打印&quot;null&quot;,因为我们没有为get(999)提供stub System.out.println(mockedList.get(999)); //通常不需要验证一个stubbed的调用 //stubbed的前提是，你的测试代码需要关注并基于get(0)的返回值继续运行，如果你的代码不需要关注get(0)的返回值，则不需要stubbed verify(mockedList).get(0); 默认情况下，所有mock实例的方法都会有一个默认的返回值:null、基本类型/基本包装类型、一个空的集合。mockito自动判断什么情况下使用哪种返回值，比如：int/Integer 返回0 ; boolean/Boolean 返回false stubbing是可以被覆盖的，例如，你可以把common的stubbing代码抽出来统一初始化，在具体某个test case再覆盖某个stubbing。但是需要注意的是：这些common的stubbing代码被覆盖太多的话，有可能是潜在的代码坏味道。 一旦对某个mock方法stubbed后，那么这个方法调用总是返回一个stubbed值，不管调用多少次，都会返回固定的stubbed值。 对同一个方法，用相同的参数stubbing，以最后一次以准。 Argument matchers 当我们对某个方法构建stubbing时，需要指定传入参数来定义来返回特定stubbed对象 , 当test case调用stubbing方法时，mockito据实际传入的传参数来判断需要返回哪个stubbed对象。 mockito使用java内置的equals()方法来对比参数。 但是，有时我们需要再加灵活的参数匹配方式。 //stubbing使用内置的anyInt()参数匹配器 when(mockedList.get(andyInt())).thenReturn(&quot;object&quot;);" />
+<link rel="canonical" href="http://192.168.2.102:4000/mockito/2018/08/14/mockito-example.html" />
+<meta property="og:url" content="http://192.168.2.102:4000/mockito/2018/08/14/mockito-example.html" />
+<meta property="og:site_name" content="李立涛" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-08-14T00:00:00+08:00" />
+<script type="application/ld+json">
+{"description":"关于Mockito的例子，翻译自官网：javaDoc mock 下面这个例子mock一个List对象作为演示，实际上，请不要mock一个List,尽量使用一个真实的List对象来完成我们的测试用例 。 //为了使代码更加整洁可读，把Mockito类静态方法都引入来。 import static org.mockito.Mockito.*; //生成一个mock实例 List mockedList = mock(List.class); //使用mock实例 mockedList.add(&quot;one&quot;); mockedList.clear(); //验证 verify(mockedList).add(&quot;one&quot;); verify(mockedList).clear(); 一旦创建一个mock实例，这个mock实例会记录所有与外部对象之间的交互过程，包括：方法调用、传入参数、调用次数等等。在这些基础上，你可以选择验证你所期望的交互。 stubbing //类和接口都可以mock LinkedList mockedList = mock(LindList.class); //stubbing when(mockedList.get(0).thenReturn(&quot;first&quot;); when(mockedList.get(1).thenReturn(new RuntimeException()); //打印查看结果:&quot;first&quot; System.out.println(mockedList.get(0)); //下面语句会抛出一个runtime excpetion System.out.println(mockedList.get(1)); //下面语句会打印&quot;null&quot;,因为我们没有为get(999)提供stub System.out.println(mockedList.get(999)); //通常不需要验证一个stubbed的调用 //stubbed的前提是，你的测试代码需要关注并基于get(0)的返回值继续运行，如果你的代码不需要关注get(0)的返回值，则不需要stubbed verify(mockedList).get(0); 默认情况下，所有mock实例的方法都会有一个默认的返回值:null、基本类型/基本包装类型、一个空的集合。mockito自动判断什么情况下使用哪种返回值，比如：int/Integer 返回0 ; boolean/Boolean 返回false stubbing是可以被覆盖的，例如，你可以把common的stubbing代码抽出来统一初始化，在具体某个test case再覆盖某个stubbing。但是需要注意的是：这些common的stubbing代码被覆盖太多的话，有可能是潜在的代码坏味道。 一旦对某个mock方法stubbed后，那么这个方法调用总是返回一个stubbed值，不管调用多少次，都会返回固定的stubbed值。 对同一个方法，用相同的参数stubbing，以最后一次以准。 Argument matchers 当我们对某个方法构建stubbing时，需要指定传入参数来定义来返回特定stubbed对象 , 当test case调用stubbing方法时，mockito据实际传入的传参数来判断需要返回哪个stubbed对象。 mockito使用java内置的equals()方法来对比参数。 但是，有时我们需要再加灵活的参数匹配方式。 //stubbing使用内置的anyInt()参数匹配器 when(mockedList.get(andyInt())).thenReturn(&quot;object&quot;);","@type":"BlogPosting","url":"http://192.168.2.102:4000/mockito/2018/08/14/mockito-example.html","headline":"mockito example","dateModified":"2018-08-14T00:00:00+08:00","datePublished":"2018-08-14T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://192.168.2.102:4000/mockito/2018/08/14/mockito-example.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://192.168.2.102:4000/feed.xml" title="李立涛" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">李立涛</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">mockito example</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2018-08-14T00:00:00+08:00" itemprop="datePublished">Aug 14, 2018
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="关于mockito的例子翻译自官网javadoc">关于Mockito的例子，翻译自官网：<a href="http://static.javadoc.io/org.mockito/mockito-core/2.21.0/org/mockito/Mockito.html">javaDoc</a></h2>
+
+<h3 id="mock">mock</h3>
+<p>下面这个例子mock一个List对象作为演示，实际上，请不要mock一个List,尽量使用一个真实的List对象来完成我们的测试用例 。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//为了使代码更加整洁可读，把Mockito类静态方法都引入来。</span>
+<span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">mockito</span><span class="o">.</span><span class="na">Mockito</span><span class="o">.*;</span>
+
+<span class="c1">//生成一个mock实例</span>
+<span class="n">List</span> <span class="n">mockedList</span> <span class="o">=</span> <span class="n">mock</span><span class="o">(</span><span class="n">List</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+<span class="c1">//使用mock实例</span>
+<span class="n">mockedList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"one"</span><span class="o">);</span>
+<span class="n">mockedList</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+
+<span class="c1">//验证</span>
+<span class="n">verify</span><span class="o">(</span><span class="n">mockedList</span><span class="o">).</span><span class="na">add</span><span class="o">(</span><span class="s">"one"</span><span class="o">);</span>
+<span class="n">verify</span><span class="o">(</span><span class="n">mockedList</span><span class="o">).</span><span class="na">clear</span><span class="o">();</span>
+
+</code></pre></div></div>
+
+<p>一旦创建一个mock实例，这个mock实例会记录所有与外部对象之间的交互过程，包括：方法调用、传入参数、调用次数等等。在这些基础上，你可以选择验证你所期望的交互。</p>
+
+<h3 id="stubbing">stubbing</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//类和接口都可以mock</span>
+<span class="n">LinkedList</span> <span class="n">mockedList</span> <span class="o">=</span> <span class="n">mock</span><span class="o">(</span><span class="n">LindList</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+<span class="c1">//stubbing</span>
+<span class="n">when</span><span class="o">(</span><span class="n">mockedList</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">).</span><span class="na">thenReturn</span><span class="o">(</span><span class="s">"first"</span><span class="o">);</span>
+<span class="n">when</span><span class="o">(</span><span class="n">mockedList</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="na">thenReturn</span><span class="o">(</span><span class="k">new</span> <span class="n">RuntimeException</span><span class="o">());</span>
+
+<span class="c1">//打印查看结果:"first"</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">mockedList</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">));</span>
+<span class="c1">//下面语句会抛出一个runtime excpetion</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">mockedList</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">));</span>
+
+<span class="c1">//下面语句会打印"null",因为我们没有为get(999)提供stub</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">mockedList</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">999</span><span class="o">));</span>
+
+<span class="c1">//通常不需要验证一个stubbed的调用</span>
+<span class="c1">//stubbed的前提是，你的测试代码需要关注并基于get(0)的返回值继续运行，如果你的代码不需要关注get(0)的返回值，则不需要stubbed</span>
+<span class="n">verify</span><span class="o">(</span><span class="n">mockedList</span><span class="o">).</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+
+</code></pre></div></div>
+
+<ol>
+  <li>默认情况下，所有mock实例的方法都会有一个默认的返回值:null、基本类型/基本包装类型、一个空的集合。mockito自动判断什么情况下使用哪种返回值，比如：int/Integer 返回0 ; boolean/Boolean 返回false</li>
+  <li>stubbing是可以被覆盖的，例如，你可以把common的stubbing代码抽出来统一初始化，在具体某个test case再覆盖某个stubbing。但是需要注意的是：这些common的stubbing代码被覆盖太多的话，有可能是潜在的代码坏味道。</li>
+  <li>一旦对某个mock方法stubbed后，那么这个方法调用总是返回一个stubbed值，不管调用多少次，都会返回固定的stubbed值。</li>
+  <li>对同一个方法，用相同的参数stubbing，以最后一次以准。</li>
+</ol>
+
+<h3 id="argument-matchers">Argument matchers</h3>
+
+<p>当我们对某个方法构建stubbing时，需要指定传入参数来定义来返回特定stubbed对象 , 当test case调用stubbing方法时，mockito据实际传入的传参数来判断需要返回哪个stubbed对象。 mockito使用java内置的equals()方法来对比参数。 但是，有时我们需要再加灵活的参数匹配方式。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//stubbing使用内置的anyInt()参数匹配器</span>
+<span class="n">when</span><span class="o">(</span><span class="n">mockedList</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">andyInt</span><span class="o">())).</span><span class="na">thenReturn</span><span class="o">(</span><span class="s">"object"</span><span class="o">);</span>
+
+
+</code></pre></div></div>
+
+
+  </div><a class="u-url" href="/mockito/2018/08/14/mockito-example.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">李立涛</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">李立涛</li><li><a class="u-email" href="mailto:43850338@qq.com">43850338@qq.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/jekyll"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jekyll</span></a></li><li><a href="https://www.twitter.com/jekyllrb"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">jekyllrb</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Welcome to My Blog</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

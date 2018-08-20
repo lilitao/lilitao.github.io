@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Spring AOP通知类型介绍 | 李立涛</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="Spring AOP通知类型介绍" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="原文地址：http://www.baeldung.com/spring-aop-advice-tutorial" />
+<meta property="og:description" content="原文地址：http://www.baeldung.com/spring-aop-advice-tutorial" />
+<link rel="canonical" href="http://192.168.2.102:4000/translate/2018/04/15/Spring-AOP%E9%80%9A%E7%9F%A5%E7%B1%BB%E5%9E%8B%E4%BB%8B%E7%BB%8D.html" />
+<meta property="og:url" content="http://192.168.2.102:4000/translate/2018/04/15/Spring-AOP%E9%80%9A%E7%9F%A5%E7%B1%BB%E5%9E%8B%E4%BB%8B%E7%BB%8D.html" />
+<meta property="og:site_name" content="李立涛" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-04-15T11:46:21+08:00" />
+<script type="application/ld+json">
+{"description":"原文地址：http://www.baeldung.com/spring-aop-advice-tutorial","@type":"BlogPosting","url":"http://192.168.2.102:4000/translate/2018/04/15/Spring-AOP%E9%80%9A%E7%9F%A5%E7%B1%BB%E5%9E%8B%E4%BB%8B%E7%BB%8D.html","headline":"Spring AOP通知类型介绍","dateModified":"2018-04-15T11:46:21+08:00","datePublished":"2018-04-15T11:46:21+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://192.168.2.102:4000/translate/2018/04/15/Spring-AOP%E9%80%9A%E7%9F%A5%E7%B1%BB%E5%9E%8B%E4%BB%8B%E7%BB%8D.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://192.168.2.102:4000/feed.xml" title="李立涛" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">李立涛</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Spring AOP通知类型介绍</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2018-04-15T11:46:21+08:00" itemprop="datePublished">Apr 15, 2018
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>原文地址：http://www.baeldung.com/spring-aop-advice-tutorial</p>
+
+<h1 id="概述">概述</h1>
+<p>这遍文章将要讨论Spring AOP中使用到的各种通知类型，
+通知是切面的具体逻辑实现，由切面负责执行，具体的某个通知对应具体的某些由切点描述的连接点。通知类型包括：前置、后置、环绕。切面即在由对象构建成的分层结构中横向关注点的抽像，比如：日志、系统配置、缓存、数据库事务管理等。
+如果你想深入了解切点表达式，请查看我的上一篇翻译文章：</p>
+
+<p>启用通知
+在Spring里，在使用AspectJ提供的注解声明通知之前，首先在Spring的配置类里声明@EnableAspectJAutoProxy 启用AspectJ组件，之后，Spring AOP将扫描和管理被AspectJ的@Aspect注解过的切面bean。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java">    <span class="nd">@Configuration</span>
+    <span class="nd">@ComponentScan</span><span class="o">(</span><span class="n">basePackages</span> <span class="o">=</span> <span class="o">{</span><span class="s">"org.baeldung.dao"</span><span class="o">,</span> <span class="s">"org.baeldung.aop"</span><span class="o">})</span>
+    <span class="nd">@EnableAspectJAutoProxy</span>
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestConfig</span> <span class="o">{</span>
+    <span class="o">...</span>
+    <span class="o">}</span></code></pre></figure>
+
+<h1 id="前置通知">前置通知</h1>
+<p>顾明思义，前置通知在连接点被执行前就被执行了，除非抛出异常，否则前置通知不能够阻止方法的继续执行。
+请看下面的代码片段，这个切面简单地打印了方法名称，在连接点执行之前。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java">    <span class="nd">@Component</span>
+    <span class="nd">@Aspect</span>
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">LoggingAspect</span> <span class="o">{</span>
+    
+	    <span class="kd">private</span> <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">LoggingAspect</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+	    
+	    <span class="nd">@Pointcut</span><span class="o">(</span><span class="s">"@target(org.springframework.stereotype.Repository)"</span><span class="o">)</span>
+	    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">repositoryMethods</span><span class="o">()</span> <span class="o">{};</span>
+	    
+	    <span class="nd">@Before</span><span class="o">(</span><span class="s">"repositoryMethods()"</span><span class="o">)</span>
+	    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">logMethodCall</span><span class="o">(</span><span class="n">JoinPoint</span> <span class="n">jp</span><span class="o">)</span> <span class="o">{</span>
+	    <span class="n">String</span> <span class="n">methodName</span> <span class="o">=</span> <span class="n">jp</span><span class="o">.</span><span class="na">getSignature</span><span class="o">().</span><span class="na">getName</span><span class="o">();</span>
+	    <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"Before "</span> <span class="o">+</span> <span class="n">methodName</span><span class="o">);</span>
+	    <span class="o">}</span>
+    <span class="o">}</span></code></pre></figure>
+
+<p>在切点表达式repositoryMethods匹配的repository method连接点执行之前，前置通知logMethodCall方法将会首先被执行。</p>
+
+<h1 id="后置通知">后置通知</h1>
+<p>使用@After注解来声明后置通知。在被匹配的连接点执行完后，执行后置通知，不管连接点执行是否有抛出异常.从另一个角度来看，后置通知跟finally语句块相似。如果你只是想在连接点方法正常返回时执行通知(异常时不执行通知)，应该使用@AfterReturning注解声明的返回型通知。如果你只是想在连接点方法抛出异常后执行通知（正常返回时不执行），应该使用@AfterThrowing注解声明的异常通知。</p>
+
+<p>假设当一个新的Foo的实例被创建时，我们希望触发一个通知事件，通知监控的组件，我们可以从FooDao发布一个事件，但是这会破坏对象的单一责任原则，这时面向切面遍程可以提供另一种方式，我们可以通过定义下面的这样一个切面来达到这种效果。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java">    <span class="nd">@Component</span>
+    <span class="nd">@Aspect</span>
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">PublishingAspect</span> <span class="o">{</span>
+    
+	    <span class="kd">private</span> <span class="n">ApplicationEventPublisher</span> <span class="n">eventPublisher</span><span class="o">;</span>
+	    
+	    <span class="nd">@Autowired</span>
+	    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setEventPublisher</span><span class="o">(</span><span class="n">ApplicationEventPublisher</span> <span class="n">eventPublisher</span><span class="o">)</span> <span class="o">{</span>
+	   		 <span class="k">this</span><span class="o">.</span><span class="na">eventPublisher</span> <span class="o">=</span> <span class="n">eventPublisher</span><span class="o">;</span>
+	    <span class="o">}</span>
+	    
+	    <span class="nd">@Pointcut</span><span class="o">(</span><span class="s">"@target(org.springframework.stereotype.Repository)"</span><span class="o">)</span>
+	    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">repositoryMethods</span><span class="o">()</span> <span class="o">{}</span>
+	    
+	    <span class="nd">@Pointcut</span><span class="o">(</span><span class="s">"execution(* *..create*(Long,..))"</span><span class="o">)</span>
+	    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">firstLongParamMethods</span><span class="o">()</span> <span class="o">{}</span>
+	    
+	    <span class="nd">@Pointcut</span><span class="o">(</span><span class="s">"repositoryMethods() &amp;&amp; firstLongParamMethods()"</span><span class="o">)</span>
+	    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">entityCreationMethods</span><span class="o">()</span> <span class="o">{}</span>
+	    
+	    <span class="nd">@AfterReturning</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"entityCreationMethods()"</span><span class="o">,</span> <span class="n">returning</span> <span class="o">=</span> <span class="s">"entity"</span><span class="o">)</span>
+	    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">logMethodCall</span><span class="o">(</span><span class="n">JoinPoint</span> <span class="n">jp</span><span class="o">,</span> <span class="n">Object</span> <span class="n">entity</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
+	    	<span class="n">eventPublisher</span><span class="o">.</span><span class="na">publishEvent</span><span class="o">(</span><span class="k">new</span> <span class="n">FooCreationEvent</span><span class="o">(</span><span class="n">entity</span><span class="o">));</span>
+	    <span class="o">}</span>
+    <span class="o">}</span></code></pre></figure>
+
+<p>请注意：首先，@AfterReturning注解，我们可以访问方法的返回值。其实，通过声明JoinPoint参数，我们可以使用目标方法调用的参数。</p>
+
+<p>下一步，我们定义一个监控器来简单地记录事件，更多关于事件的文档，请查看：http://www.baeldung.com/spring-events</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java">    <span class="nd">@Component</span>
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">FooCreationEventListener</span> <span class="kd">implements</span> <span class="n">ApplicationListener</span><span class="o">&lt;</span><span class="n">FooCreationEvent</span><span class="o">&gt;</span> <span class="o">{</span>
+    
+	    <span class="kd">private</span> <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">getClass</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+	    
+	    <span class="nd">@Override</span>
+	    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onApplicationEvent</span><span class="o">(</span><span class="n">FooCreationEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+	    	<span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"Created foo instance: "</span> <span class="o">+</span> <span class="n">event</span><span class="o">.</span><span class="na">getSource</span><span class="o">().</span><span class="na">toString</span><span class="o">());</span>
+	    <span class="o">}</span>
+    <span class="o">}</span></code></pre></figure>
+
+<h1 id="环绕通知">环绕通知</h1>
+<p>环绕通知包围着连接点，例如在目标方法调用前后执行切面逻辑。</p>
+
+<p>环绕通知是最强大的一种通知，在目标方法执行的前后可以执行用户自定义的切面逻辑，也可以在环绕通知里决定是否继续执行连接点方法或者跳过连接点直接在环绕通里返回值或者抛出异常。</p>
+
+<p>为了演示环绕通知的使用例子，现在假如你想要测量连接点方法的执行时间，为了达到这样的目的，你可以建立以下这个的切面：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java">    <span class="nd">@Aspect</span>
+    <span class="nd">@Component</span>
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">PerformanceAspect</span> <span class="o">{</span>
+    
+	    <span class="kd">private</span> <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">getClass</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+	    
+	    <span class="nd">@Pointcut</span><span class="o">(</span><span class="s">"within(@org.springframework.stereotype.Repository *)"</span><span class="o">)</span>
+	    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">repositoryClassMethods</span><span class="o">()</span> <span class="o">{};</span>
+	    
+	    <span class="nd">@Around</span><span class="o">(</span><span class="s">"repositoryClassMethods()"</span><span class="o">)</span>
+	    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">measureMethodExecutionTime</span><span class="o">(</span><span class="n">ProceedingJoinPoint</span> <span class="n">pjp</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
+		    <span class="kt">long</span> <span class="n">start</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>
+		    <span class="n">Object</span> <span class="n">retval</span> <span class="o">=</span> <span class="n">pjp</span><span class="o">.</span><span class="na">proceed</span><span class="o">();</span>
+		    <span class="kt">long</span> <span class="n">end</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>
+		    <span class="n">String</span> <span class="n">methodName</span> <span class="o">=</span> <span class="n">pjp</span><span class="o">.</span><span class="na">getSignature</span><span class="o">().</span><span class="na">getName</span><span class="o">();</span>
+		    <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"Execution of "</span> <span class="o">+</span> <span class="n">methodName</span> <span class="o">+</span> <span class="s">" took "</span> <span class="o">+</span> 
+		      <span class="n">TimeUnit</span><span class="o">.</span><span class="na">NANOSECONDS</span><span class="o">.</span><span class="na">toMillis</span><span class="o">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="o">)</span> <span class="o">+</span> <span class="s">" ms"</span><span class="o">);</span>
+		    <span class="k">return</span> <span class="n">retval</span><span class="o">;</span>
+	    <span class="o">}</span>
+    <span class="o">}</span></code></pre></figure>
+
+<p>当通过repositoryClassMethods 这个切点匹配的所有连接点被执行时，上面切面所示的通知就会被触发。这个方法接收一个ProceedingJointPoint类型的参数，我们可以在使用这个参数执行目标方法之前，执行我们的切面逻辑。在上面的例子里，我们只时简单地保存了目标方法调用的开始时间。其次，由于目标方法可以返回任意类型的对象，所以这个通知的返回值类型是Object，有一点需要注意的是，如果目标方法返回类型是void,通知的必须返回一个null。当目标方法调用完成后，我们可以计算调用时间并打印，然后把返回值返回给调用者。</p>
+
+<p>总结
+在这篇文单里，我们学习了Spring中的不同类型的通知和这些通知的声明和实现方式。我们使用基于模式定义的方法和java注解来定义切面。我们提供了几种合适的通知应用场景。</p>
+
+<p>上面所有的例子实现和代码可以在原作者的github里找到：https://github.com/eugenp/tutorials/tree/master/spring-mvc-java ，那是基于eclipse的工程结构，所以很容易导入和运行。</p>
+
+
+  </div><a class="u-url" href="/translate/2018/04/15/Spring-AOP%E9%80%9A%E7%9F%A5%E7%B1%BB%E5%9E%8B%E4%BB%8B%E7%BB%8D.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">李立涛</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">李立涛</li><li><a class="u-email" href="mailto:43850338@qq.com">43850338@qq.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/jekyll"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jekyll</span></a></li><li><a href="https://www.twitter.com/jekyllrb"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">jekyllrb</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Welcome to My Blog</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

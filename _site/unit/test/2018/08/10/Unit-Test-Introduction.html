@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>unit test introduction | 李立涛</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="unit test introduction" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="what is UT actually looked like @Test public void should_pring_success_given_list(){ //given Purchase purchase = new Puchase(Arrays.asList(new Milk(),new Book())); Print print = new Print(puchase); //when String result = print.printPurchase(); //then assertThat(result).contains(&quot;milk&quot;,&quot;book&quot;); } It is just plain java method with a test annotation on it. It should have three standard parts, given, when, then, the given part prepares the precondition of the test, the when part call the method to be tested, and the then part just verifies if the result is as expected. When used in project, the comments of given, when, then in the above example should not be added, for it is just for educating purpose. compare UT with other tests what does it mean by “unit” of a unit test unit tests are low-level , focusing on a small functional point unit tests should completed by developer who are responsible for implement functionality unit testes should run faster more than other kinds of tests , like : Service Tests , UI tests compare unit test with service test and UI test Unit tests usually tests the functionality olny includes POJO and is the faster , A unit test’s cover range is small . The numbers of unit tests is the bigger . the coverage can give is high The other types of test , including service test and UI test , can only provide limited coverage rate , and their coast are higher , so their amount is relatively smaller , and they are run slowly , so they can not give a feedback quickly to the developer. There are lots of tests in this industry, in the above picture, we can see them classified in four quadrants. The upper quadrants(Q2,Q3) are mainly to verify the function is built according to the requirement, so it is called “business-facing”. The lower quadrants(Q1, Q4) are for the internal quality of our delivery, which means if the code is built in a expressive, low coupling, high cohesive way. The left quadrants(Q1, Q2) are for supporting the development team to deliver better and easier. The right quadrants(Q3, Q4) are for verifying the quality of the system as whole by involing test team or user to do the test why bother to write UT brain overload Many developer may feel that programming is wearing .One of the main reason is , when programming ,we need to maintain the logic in a consistent state . If the functionality is big . our brain needs to scan again and again if logic are consistent , which drains our mind energy dramatically. In a modern psychology research, normal human beings can hold only 7 logic aspects in consistency, but 7 is small comparing to a programmer’s daily work. And unit test expecially TDD can effectively split the problem area into small aspect, and the programmer just needs to focus on the current small step’s problem, which obviously relieve the spirit burdon of the programmer. shotgun change We usually find ourself in a situation that some requirements changing will impact many points of different method coding . and the worse case is that , the modifications of these coding are not the same , No one can be sure of finally changing these code will not incur any defect , Though system covered by automatic tests do not suffered to this problem . broken safenet In many teams , expecially those use waterfall development model , the test team is treated as a safenet , Since having safenet , developer ,even everyone thought of quality should be took over by test team , and thought of test team guarantees the delivery quality , and thought of no one in the group but the test team needed to take responsibility to the final quality of the delivery But the real is, the safenet seems has broken holes , and defects leak . Because of as the system evolved , the code base was growing up , more and more supplemental functionality , many requirement has been changed . The coast of fully regression test for each release is becoming more and more expensive and rarer , so it is difficult to avoid defects , Many projects failed or become more and more difficult cause by this delusion of having perfect safenet. hard to hit the root cause of the problem In a high coupling system , most time , root cause of defects are hard to find out . Sometime , to setting up the environment to duplicate a error is time consuming . Using TDD, we will be more apt to write system with low coupling(because high coupling make it hard to be tested.), which will be more easy to isolate out the sub-module having defect, and setup scaffold to build the test to reproduce the error. high risk to make change Even though we were aware that our system have many kinds of problem , and we know we should deal with these problem in one way or another ,for example refactoring that bad code . but no one dare . because of so high coast to do regression test for changing . So it is time for us to do something to help ourselves to say good bye to the problem above and have a better career experience the ROI of automation change Goals of tests improve quality understand the SUT(system under test) reduce risk Be easy to write , maintain and run expressive fast isolated repeatable self-validating timely Be easy to evolves focus on value tests should have low overlap should not depend on environment" />
+<meta property="og:description" content="what is UT actually looked like @Test public void should_pring_success_given_list(){ //given Purchase purchase = new Puchase(Arrays.asList(new Milk(),new Book())); Print print = new Print(puchase); //when String result = print.printPurchase(); //then assertThat(result).contains(&quot;milk&quot;,&quot;book&quot;); } It is just plain java method with a test annotation on it. It should have three standard parts, given, when, then, the given part prepares the precondition of the test, the when part call the method to be tested, and the then part just verifies if the result is as expected. When used in project, the comments of given, when, then in the above example should not be added, for it is just for educating purpose. compare UT with other tests what does it mean by “unit” of a unit test unit tests are low-level , focusing on a small functional point unit tests should completed by developer who are responsible for implement functionality unit testes should run faster more than other kinds of tests , like : Service Tests , UI tests compare unit test with service test and UI test Unit tests usually tests the functionality olny includes POJO and is the faster , A unit test’s cover range is small . The numbers of unit tests is the bigger . the coverage can give is high The other types of test , including service test and UI test , can only provide limited coverage rate , and their coast are higher , so their amount is relatively smaller , and they are run slowly , so they can not give a feedback quickly to the developer. There are lots of tests in this industry, in the above picture, we can see them classified in four quadrants. The upper quadrants(Q2,Q3) are mainly to verify the function is built according to the requirement, so it is called “business-facing”. The lower quadrants(Q1, Q4) are for the internal quality of our delivery, which means if the code is built in a expressive, low coupling, high cohesive way. The left quadrants(Q1, Q2) are for supporting the development team to deliver better and easier. The right quadrants(Q3, Q4) are for verifying the quality of the system as whole by involing test team or user to do the test why bother to write UT brain overload Many developer may feel that programming is wearing .One of the main reason is , when programming ,we need to maintain the logic in a consistent state . If the functionality is big . our brain needs to scan again and again if logic are consistent , which drains our mind energy dramatically. In a modern psychology research, normal human beings can hold only 7 logic aspects in consistency, but 7 is small comparing to a programmer’s daily work. And unit test expecially TDD can effectively split the problem area into small aspect, and the programmer just needs to focus on the current small step’s problem, which obviously relieve the spirit burdon of the programmer. shotgun change We usually find ourself in a situation that some requirements changing will impact many points of different method coding . and the worse case is that , the modifications of these coding are not the same , No one can be sure of finally changing these code will not incur any defect , Though system covered by automatic tests do not suffered to this problem . broken safenet In many teams , expecially those use waterfall development model , the test team is treated as a safenet , Since having safenet , developer ,even everyone thought of quality should be took over by test team , and thought of test team guarantees the delivery quality , and thought of no one in the group but the test team needed to take responsibility to the final quality of the delivery But the real is, the safenet seems has broken holes , and defects leak . Because of as the system evolved , the code base was growing up , more and more supplemental functionality , many requirement has been changed . The coast of fully regression test for each release is becoming more and more expensive and rarer , so it is difficult to avoid defects , Many projects failed or become more and more difficult cause by this delusion of having perfect safenet. hard to hit the root cause of the problem In a high coupling system , most time , root cause of defects are hard to find out . Sometime , to setting up the environment to duplicate a error is time consuming . Using TDD, we will be more apt to write system with low coupling(because high coupling make it hard to be tested.), which will be more easy to isolate out the sub-module having defect, and setup scaffold to build the test to reproduce the error. high risk to make change Even though we were aware that our system have many kinds of problem , and we know we should deal with these problem in one way or another ,for example refactoring that bad code . but no one dare . because of so high coast to do regression test for changing . So it is time for us to do something to help ourselves to say good bye to the problem above and have a better career experience the ROI of automation change Goals of tests improve quality understand the SUT(system under test) reduce risk Be easy to write , maintain and run expressive fast isolated repeatable self-validating timely Be easy to evolves focus on value tests should have low overlap should not depend on environment" />
+<link rel="canonical" href="http://192.168.2.102:4000/unit/test/2018/08/10/Unit-Test-Introduction.html" />
+<meta property="og:url" content="http://192.168.2.102:4000/unit/test/2018/08/10/Unit-Test-Introduction.html" />
+<meta property="og:site_name" content="李立涛" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-08-10T00:00:00+08:00" />
+<script type="application/ld+json">
+{"description":"what is UT actually looked like @Test public void should_pring_success_given_list(){ //given Purchase purchase = new Puchase(Arrays.asList(new Milk(),new Book())); Print print = new Print(puchase); //when String result = print.printPurchase(); //then assertThat(result).contains(&quot;milk&quot;,&quot;book&quot;); } It is just plain java method with a test annotation on it. It should have three standard parts, given, when, then, the given part prepares the precondition of the test, the when part call the method to be tested, and the then part just verifies if the result is as expected. When used in project, the comments of given, when, then in the above example should not be added, for it is just for educating purpose. compare UT with other tests what does it mean by “unit” of a unit test unit tests are low-level , focusing on a small functional point unit tests should completed by developer who are responsible for implement functionality unit testes should run faster more than other kinds of tests , like : Service Tests , UI tests compare unit test with service test and UI test Unit tests usually tests the functionality olny includes POJO and is the faster , A unit test’s cover range is small . The numbers of unit tests is the bigger . the coverage can give is high The other types of test , including service test and UI test , can only provide limited coverage rate , and their coast are higher , so their amount is relatively smaller , and they are run slowly , so they can not give a feedback quickly to the developer. There are lots of tests in this industry, in the above picture, we can see them classified in four quadrants. The upper quadrants(Q2,Q3) are mainly to verify the function is built according to the requirement, so it is called “business-facing”. The lower quadrants(Q1, Q4) are for the internal quality of our delivery, which means if the code is built in a expressive, low coupling, high cohesive way. The left quadrants(Q1, Q2) are for supporting the development team to deliver better and easier. The right quadrants(Q3, Q4) are for verifying the quality of the system as whole by involing test team or user to do the test why bother to write UT brain overload Many developer may feel that programming is wearing .One of the main reason is , when programming ,we need to maintain the logic in a consistent state . If the functionality is big . our brain needs to scan again and again if logic are consistent , which drains our mind energy dramatically. In a modern psychology research, normal human beings can hold only 7 logic aspects in consistency, but 7 is small comparing to a programmer’s daily work. And unit test expecially TDD can effectively split the problem area into small aspect, and the programmer just needs to focus on the current small step’s problem, which obviously relieve the spirit burdon of the programmer. shotgun change We usually find ourself in a situation that some requirements changing will impact many points of different method coding . and the worse case is that , the modifications of these coding are not the same , No one can be sure of finally changing these code will not incur any defect , Though system covered by automatic tests do not suffered to this problem . broken safenet In many teams , expecially those use waterfall development model , the test team is treated as a safenet , Since having safenet , developer ,even everyone thought of quality should be took over by test team , and thought of test team guarantees the delivery quality , and thought of no one in the group but the test team needed to take responsibility to the final quality of the delivery But the real is, the safenet seems has broken holes , and defects leak . Because of as the system evolved , the code base was growing up , more and more supplemental functionality , many requirement has been changed . The coast of fully regression test for each release is becoming more and more expensive and rarer , so it is difficult to avoid defects , Many projects failed or become more and more difficult cause by this delusion of having perfect safenet. hard to hit the root cause of the problem In a high coupling system , most time , root cause of defects are hard to find out . Sometime , to setting up the environment to duplicate a error is time consuming . Using TDD, we will be more apt to write system with low coupling(because high coupling make it hard to be tested.), which will be more easy to isolate out the sub-module having defect, and setup scaffold to build the test to reproduce the error. high risk to make change Even though we were aware that our system have many kinds of problem , and we know we should deal with these problem in one way or another ,for example refactoring that bad code . but no one dare . because of so high coast to do regression test for changing . So it is time for us to do something to help ourselves to say good bye to the problem above and have a better career experience the ROI of automation change Goals of tests improve quality understand the SUT(system under test) reduce risk Be easy to write , maintain and run expressive fast isolated repeatable self-validating timely Be easy to evolves focus on value tests should have low overlap should not depend on environment","@type":"BlogPosting","url":"http://192.168.2.102:4000/unit/test/2018/08/10/Unit-Test-Introduction.html","headline":"unit test introduction","dateModified":"2018-08-10T00:00:00+08:00","datePublished":"2018-08-10T00:00:00+08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://192.168.2.102:4000/unit/test/2018/08/10/Unit-Test-Introduction.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://192.168.2.102:4000/feed.xml" title="李立涛" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">李立涛</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">unit test introduction</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2018-08-10T00:00:00+08:00" itemprop="datePublished">Aug 10, 2018
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="what-is-ut-actually-looked-like">what is UT actually looked like</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">should_pring_success_given_list</span><span class="o">(){</span>
+	<span class="c1">//given</span>
+	<span class="n">Purchase</span> <span class="n">purchase</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Puchase</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">Milk</span><span class="o">(),</span><span class="k">new</span> <span class="n">Book</span><span class="o">()));</span>
+    <span class="n">Print</span> <span class="n">print</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Print</span><span class="o">(</span><span class="n">puchase</span><span class="o">);</span>
+    <span class="c1">//when</span>
+    <span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="n">print</span><span class="o">.</span><span class="na">printPurchase</span><span class="o">();</span>
+   <span class="c1">//then</span>
+   <span class="n">assertThat</span><span class="o">(</span><span class="n">result</span><span class="o">).</span><span class="na">contains</span><span class="o">(</span><span class="s">"milk"</span><span class="o">,</span><span class="s">"book"</span><span class="o">);</span>
+<span class="o">}</span> 
+</code></pre></div></div>
+<p>It is just plain java method with a test annotation on it.</p>
+
+<p>It should have three standard parts, given, when, then, the given part prepares the precondition of the test, the when part call the method to be tested, and the then part just verifies if the result is as expected.</p>
+
+<p>When used in project, the comments of given, when, then in the above example should not be added, for it is just for educating purpose.</p>
+
+<h2 id="compare-ut-with-other-tests">compare UT with other tests</h2>
+
+<h3 id="what-does-it-mean-by-unit-of-a-unit-test">what does it mean by “unit” of a unit test</h3>
+
+<ol>
+  <li>unit tests are low-level , focusing on a small functional point</li>
+  <li>unit tests should completed by developer who are responsible for implement functionality</li>
+  <li>unit testes should run faster more than other kinds of tests , like : Service Tests , UI tests</li>
+</ol>
+
+<h3 id="compare-unit-test-with-service-test-and-ui-test">compare unit test with service test and UI test</h3>
+
+<p><img src="http://192.168.2.102:4000/assets/images/image-unit-test.png" alt="unit-test-compare-with-other-tests" title="unit test compare with other tests" /></p>
+
+<p>Unit tests usually tests the functionality olny includes POJO and is the faster , A unit test’s cover range is small . The numbers of unit tests is the bigger . the coverage can give is high
+The other types of test  , including service test and UI test , can only provide  limited coverage rate , and their coast are higher , so their amount is relatively smaller , and they are run slowly , so they can not give a feedback quickly to the developer.</p>
+
+<p><img src="http://192.168.2.102:4000/assets/images/unit-test-business-facing.jpg" alt="business/technology facing" title="business technology facing" /></p>
+
+<p>There are lots of tests in this industry, in the above picture, we can see them classified in four quadrants.</p>
+
+<ol>
+  <li>
+    <p>The upper quadrants(Q2,Q3) are mainly to verify the function is built according to the requirement, so it is called “business-facing”.</p>
+  </li>
+  <li>
+    <p>The lower quadrants(Q1, Q4) are for the internal quality of our delivery, which means if the code is built in a expressive, low coupling, high cohesive way.</p>
+  </li>
+  <li>
+    <p>The left quadrants(Q1, Q2)  are for supporting the development team to deliver better and easier.</p>
+  </li>
+  <li>
+    <p>The right quadrants(Q3, Q4) are for verifying the quality of the system as whole by involing test team or user to do the test</p>
+  </li>
+</ol>
+
+<h2 id="why-bother-to-write-ut">why bother to write UT</h2>
+
+<h3 id="brain-overload">brain overload</h3>
+
+<p>Many developer may feel that programming is wearing .One of the main reason is , when programming ,we need to maintain the logic in a consistent state . If the functionality is big . our brain needs to scan again and again if logic are consistent , which drains our mind energy dramatically.</p>
+
+<p>In a modern psychology research, normal human beings can hold only 7 logic aspects in consistency, but 7 is small comparing to a programmer’s daily work.</p>
+
+<p>And unit test expecially TDD can effectively split the problem area into small aspect, and the programmer just needs to focus on the current small step’s problem, which obviously relieve the spirit burdon of the programmer.</p>
+
+<h3 id="shotgun-change">shotgun change</h3>
+
+<p><img src="http://192.168.2.102:4000/assets/images/image-shotgun-chnage.png" alt="shotgun-change" title="shotgun change" /></p>
+
+<p>We usually find ourself in a situation that some requirements changing  will impact many points of different method coding  . and the worse case is that , the modifications of these coding are not the same , No one can be sure of finally changing these code will not incur any defect , Though system covered by automatic tests do not suffered to this problem .</p>
+
+<h3 id="broken-safenet">broken safenet</h3>
+
+<p><img src="http://192.168.2.102:4000/assets/images/image-broken-safenet.png" alt="broken safenet" title="broken safenet" /></p>
+
+<p>In many teams , expecially those use waterfall development model , the test team is treated as a safenet , Since having safenet , developer ,even everyone thought of quality should be took over by test team , and thought of test team guarantees the delivery quality , and thought of no one in the group but the test team needed to take responsibility to the final quality of the delivery</p>
+
+<p>But the real is, the safenet seems has broken holes , and defects leak . Because of as the system evolved , the code base was growing up , more and more supplemental functionality , many requirement has been changed . The coast of fully regression test for each release is becoming more and more expensive and rarer , so it is difficult to avoid defects , Many projects failed or become more and more difficult cause by this delusion of having perfect safenet.</p>
+
+<h3 id="hard-to-hit-the-root-cause-of-the-problem">hard to hit the root cause of the problem</h3>
+
+<p><img src="http://192.168.2.102:4000/assets/images/image-hit-cause.png" alt="hard to hit root cause" title="broken safenet" /></p>
+
+<p>In a high coupling system , most time , root cause of defects are hard to find out . Sometime , to setting up the environment to duplicate a error is time consuming . Using TDD, we will be more apt to write system with low coupling(because high coupling make it hard to be tested.), which will be more easy to isolate out the sub-module having defect, and setup scaffold to build the test to reproduce the error.</p>
+
+<h3 id="high-risk-to-make-change">high risk to make change</h3>
+
+<p><img src="http://192.168.2.102:4000/assets/images/image-risky.png" alt="risky" title="high risk" /></p>
+
+<p>Even though we were  aware that our system have many kinds of problem , and we know we should deal with these problem in one way or another ,for example refactoring that bad code . but no one dare . because of so high coast to do regression test for changing .
+So it is time for us to do something to help ourselves to say good bye to the problem above and have a better career experience</p>
+
+<h2 id="the-roi-of-automation-change">the ROI of automation change</h2>
+
+<p><img src="http://192.168.2.102:4000/assets/images/image-roi.png" alt="roi" title="roi" /></p>
+
+<h2 id="goals-of-tests">Goals of tests</h2>
+
+<h3 id="improve-quality">improve quality</h3>
+
+<h3 id="understand-the-sutsystem-under-test">understand the SUT(system under test)</h3>
+
+<h3 id="reduce-risk">reduce risk</h3>
+
+<h2 id="be-easy-to-write--maintain-and-run">Be easy to write , maintain and run</h2>
+
+<h3 id="expressive">expressive</h3>
+
+<h3 id="fast">fast</h3>
+
+<h3 id="isolated">isolated</h3>
+
+<h3 id="repeatable">repeatable</h3>
+
+<h3 id="self-validating">self-validating</h3>
+
+<h3 id="timely">timely</h3>
+
+<h2 id="be-easy-to-evolves">Be easy to evolves</h2>
+
+<h3 id="focus-on-value">focus on value</h3>
+
+<h3 id="tests-should-have-low-overlap">tests should have low overlap</h3>
+
+<h3 id="should-not-depend-on-environment">should not depend on environment</h3>
+
+
+  </div><a class="u-url" href="/unit/test/2018/08/10/Unit-Test-Introduction.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">李立涛</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">李立涛</li><li><a class="u-email" href="mailto:43850338@qq.com">43850338@qq.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/jekyll"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jekyll</span></a></li><li><a href="https://www.twitter.com/jekyllrb"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">jekyllrb</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Welcome to My Blog</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
