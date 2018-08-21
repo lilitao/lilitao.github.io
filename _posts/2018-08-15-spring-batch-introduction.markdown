@@ -148,7 +148,7 @@ private JobCompletionNotificationListener jobCompletionNotificationListener;
                 .incrementer(new RunIdIncrementer())
                 .listener(jobCompletionNotificationListener)
                 .flow(uploadStep(path))
-                .next(validationStep())
+                .next(dataSqlValidationStep())
                 .end()
                 .build();
 
@@ -263,8 +263,210 @@ public class FileUploadProcessor implements ItemProcessor<FileUploadExcel,FileUp
 }
 ```
 
-* `FileUploadWriter<FileUploadPo>` a imp be using for data persistence
+* `writer` is a instance of `FileUploadWriter<FileUploadPo>` that is  implments of `ItemWriter` be using for data persistence
 
 ```java
+@Component
+public class FileUploadWriter<T> implements ItemWriter<FileUploadPo> {
+    @Autowired
+    FileUploadDataPoRepository repository;
+    @Override
+    public void write(List<? extends FileUploadPo > items) throws Exception {
+        logger.info("upload writer:{}",items);
+        long time = System.currentTimeMillis();
+        repository.saveAll(items);        
+        logger.info("using time:{}",System.currentTimeMillis() - time);
+    }
+}
 
 ``` 
+
+* `excelDataSupplementListener`  is a instance of job event listener be used to supplement data after read before process.
+
+```java
+@Component
+public class ExcelDataSupplementListener {
+    static final SimpleDateFormat  DATE_FORMAT =new SimpleDateFormat("MM-dd-yyyy");
+    @AfterRead
+    public void supplement(FileUploadExcel excel) {
+        if (excel.getDate() != null) {
+            Date date = new Date();
+            date.setTime(Long.valueOf(excel.getDate()));
+            excel.setDate(DATE_FORMAT.format(date));
+        }
+    }
+
+}
+
+```
+
+* `FileUploadValidatorListener` is a instance of job event listener be used to validate data before process
+
+```java
+@Component
+public class FileUploadValidatorListener {
+    @Autowired
+    ApplicationContext applicationContext;
+
+    @BeforeProcess
+    public void verify(FileUploadExcel excelBean) {
+        doVerify(new ClientValidator(excelBean));
+
+        doVerify(new DateValidator(excelBean));
+    }
+
+    private void doVerify(Validator validator) {
+        if (!validator.verify())
+            handleErrorMessage(validator);
+    }
+    private void handleErrorMessage(Validator validator) {
+        ValidationErrorMessageEvent event = new ValidationErrorMessageEvent(this, validator.getErrorMessage());
+        applicationContext.publishEvent(event);
+    }
+}
+```
+
+* `applicationContext` used to publish a validation error event when validation error
+* `ValidationErrorMessageEvent` a validation error even implemented  `ApplicationEvent` within spring
+
+```java
+public class ValidationErrorMessageEvent extends ApplicationEvent {
+    List<ValidationMessageOfFileUpload> errorMessage = new LinkedList<>();
+
+    public List<ValidationMessageOfFileUpload> getErrorMessage() {
+        return errorMessage;
+    }
+    /**
+     * Create a new ApplicationEvent.
+     *
+     * @param source the object on which the event initially occurred (never {@code null})
+     */
+    public ValidationErrorMessageEvent(Object source,List<ValidationMessageOfFileUpload> errorMessage) {
+        super(source);
+        this.errorMessage = errorMessage;
+    }
+}
+``` 
+
+* `ValidationMessageOfFileUpload` a java bean for erorr message
+* `ValidationErrorEventListener` this event listener will listen to `ValidationErrorMessageEvent` aways 
+
+```java
+@Component
+@Slf4j
+public class ValidationErrorEventListener {
+
+    List<ValidationMessageOfFileUpload> errorMessages = new LinkedList<>();
+
+    @Autowired
+    FileUploadErrorMessagePoRepository repository;
+
+    @EventListener(classes = ValidationErrorMessageEvent.class)
+    public void handleErrorMessage(MfuValidationErrorMessageEvent event) {
+        errorMessages.addAll(event.getErrorMessage());
+        if (errorMessages.size() >= 1000) {
+            log.info("handle error message,the number of error message is :{}", errorMessages.size());
+            persist(errorMessages);
+            errorMessages.clear();
+        }
+    }
+
+    private void persist(List<ValidationMessageOfFileUpload> errorMessages) {
+        List<FileUploadErrorMessagePo> pos = errorMessages.stream().map(error -> createPo(error)).collect(Collectors.toList());
+        repository.saveAll(pos);
+    }
+
+    private FileUploadErrorMessagePo createPo(ValidationMessageOfFileUpload error) {
+        FileUploadErrorMessagePo po = new FileUploadErrorMessagePo();
+        po.setRowNumber(error.getRowNumber());
+        po.setMessage(error.getMessage());
+        //TODO other property should be supplemented
+        return po;
+    }
+
+    @AfterStep
+    public void handleErrorMessageLastBatch(StepExecution stepExecution) {
+        if (errorMessages.size() > 0) {
+            log.info("handle  file upload error message last batch ,the number of last batch is {}:", errorMessages.size());
+            persist(errorMessages);
+            errorMessages.clear();
+        }
+    }
+}
+
+```
+
+* `@AfterStep` on method `handleErrorMessageLastBatch` to listen to the job event , so that system can handle last batch error message to persist .
+
+4. `dataSqlValidationStep()` create validaton setp
+
+```java
+   @Autowired
+   SqlValidatorReaderBuilder sqlValidatorReaderBuilder;
+
+   @Autowired
+   SqlValidatorProcessor sqlValidatorProcessor;
+
+   @Autowired
+   SqlValidatorWriter sqlValidatorWriter;
+
+   private Step dataSqlValidationStep() {
+        return stepBuilderFactory.get("dataSqlValidationStep")
+                .<SqlValidator,SqlValidator>chunk(1)
+                .reader(sqlValidatorReaderBuilder.build())
+                .processor(sqlValidatorProcessor)
+                .writer(sqlValidatorWriter)
+                .build();
+   }
+``` 
+
+* `sqlValidatorReaderBuilder` build a `ItemReader` to read item like this
+
+```java
+@Component
+public class SqlValidatorReaderBuilder {
+
+    @Autowired
+    ApplicationContext context;
+
+    public ListItemReader<SqlValidator> build() {
+        Map<String, SqlValidator> validators  = context.getBeansOfType(SqlValidator.class);
+        ListItemReader<SqlValidator> reader = new ListItemReader<>(validators.values().stream().collect(Collectors.toList()));
+        return reader;
+    }
+}
+
+```
+
+* `sqlValidatorProcessor` a validation processor like below,
+
+```java
+@Component
+public class SqlValidatorProcessor implements ItemProcessor<SqlValidator, SqlValidator> {
+    @Autowired
+    ApplicationContext context;
+    @Override
+    public SqlValidator process(SqlValidator item) throws Exception {
+        if (item != null) {
+            item.verify();
+        }
+        return item;
+    }
+}
+```
+
+* `sqlValidatorWriter` a writer to persist data
+
+```java
+@Component
+public class SqlValidatorWriter implements ItemWriter<SqlValidator> {
+    @Autowired
+    UploadDataPoRepository repository;
+    @Override
+    public void write(List<? extends SqlValidator> items) throws Exception {
+
+    }
+}
+```
+
+Throughout above step by step , we build up a spring batch example. and walked you through the process of batch job
