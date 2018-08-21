@@ -58,8 +58,17 @@ This example demonstrate how to upload data into database from excel .
 public class BatchConfiguration 
 
 ```
+
 1. `@EnableBatchProcessing` annotation on class to enable batch job
-2. `@EnableScheduling` enable our use spring schedule component to schedule our batch job , beside launch batch job by web application online
+2. `@EnableScheduling` enable  spring schedule component to schedule our batch job , beside launch batch job by web application online
+
+beside above configuration , in `application.properties` , batch job global configuration is need 
+
+```properties
+spring.batch.table-prefix=BATCH_
+spring.batch.initialize-schema=always
+spring.batch.job.enabled=false
+```
 
 In addition , we should also enable spring transaction management for batch job transaction.
 
@@ -468,5 +477,26 @@ public class SqlValidatorWriter implements ItemWriter<SqlValidator> {
     }
 }
 ```
+
+5. spring JPA batch insert configuration
+
+Configure batch insert in `application.properties`
+
+```properties
+hibernate.jdbc.batch_size=1000
+hibernate.order_inserts=true
+hibernate.order_updates=true
+hibernate.jdbc.batch_versioned_data=true
+spring.jpa.hibernate.jdbc.batch_size=1000
+spring.jpa.hibernate.order_inserts=true
+spring.jpa.hibernate.order_updates=true
+spring.jpa.hibernate.jdbc.batch_versioned_data=true
+spring.jpa.properties.hibernate.jdbc.batch_size=1000
+spring.jpa.properties.hibernate.order_inserts=true
+spring.jpa.properties.hibernate.order_updates=true
+spring.jpa.properties.hibernate.jdbc.batch_versioned_data=true
+
+```
+
 
 Throughout above step by step , we build up a spring batch example. and walked you through the process of batch job
