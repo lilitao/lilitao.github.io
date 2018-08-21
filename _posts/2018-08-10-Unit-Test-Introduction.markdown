@@ -100,6 +100,7 @@ So it is time for us to do something to help ourselves to say good bye to the pr
 
 ![roi]({{ site.url }}/assets/images/image-roi.png "roi")
 
+Generally , 
 
 ## Goals of tests
 

@@ -38,7 +38,7 @@ the primary table are : batch_job_instance , batch_job_execution , batch_setp_ex
 ### summary of architecture
 
 refer to : [spring batch docs](http://www.baeldung.com/introduction-to-spring-batch)
-Use above link for find and digging into design architecture of spring batch , in this sections , will walk you through the summary of spring batch .
+Use this link for find and digging into design architecture of spring batch , in this sections , will walk you through the summary of spring batch .
 
 The following diagram for overall hierarchy 
 
@@ -66,7 +66,7 @@ public class BatchConfiguration
 1. `@EnableBatchProcessing` annotation on class to enable batch job
 2. `@EnableScheduling` enable  spring schedule component to schedule our batch job , beside launch batch job by web application online
 
-beside above configuration , in `application.properties` , batch job global configuration is need 
+beside above configuration , in `application.properties` , batch job global configuration are needed
 
 ```properties
 spring.batch.table-prefix=BATCH_
