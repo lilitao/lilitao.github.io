@@ -1,6 +1,6 @@
 ---
 layout: post
-title: spring batch introduction
+title: spring batch in practice
 date: 2018-08-15
 categories: spring batch
 ---
@@ -39,6 +39,10 @@ the primary table are : batch_job_instance , batch_job_execution , batch_setp_ex
 
 refer to : [spring batch docs](http://www.baeldung.com/introduction-to-spring-batch)
 Use above link for find and digging into design architecture of spring batch , in this sections , will walk you through the summary of spring batch .
+
+The following diagram for overall hierarchy 
+
+![spring-batch-reference-model]({{ site.url }}/assets/images/spring-batch-reference-model.png)
 
 ### creation of parallel batch job 
 
