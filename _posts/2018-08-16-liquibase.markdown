@@ -3,6 +3,7 @@ layout: post
 title: liquibase increment SQL script
 date: 2018-08-16
 categories: liquibase 
+description: In liquibase , using many db change log file for maintaining db meta-data or structure , These db change log includes database operation of DDL , These db change log file would resides in resources directory 
 ---
 * summary
 * create a database change log file
