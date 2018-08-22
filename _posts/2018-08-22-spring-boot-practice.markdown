@@ -22,6 +22,7 @@ author: AndyLi
 * liquibase
 * JPA data access
 * FeignClient
+* actuator
 * jacoco
 * javadoc
 * plantuml
@@ -72,7 +73,7 @@ author: AndyLi
 ...
 ```
 
-* 我们有使用流的方式读取excel,在`dependencyManagement`中加入关于读到excel的dependency
+* 我们有使用流的方式读取excel,在`dependencyManagement`中加入关于excel的dependency
 
 ```xml
 ...
