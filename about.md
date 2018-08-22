@@ -1,10 +1,11 @@
 ---
 layout: page
-title: 
+title: About
 permalink: /about/
 
 ---
 
+## 简介
 ![李立涛]({{ "/assets/images/priary.png" | absolute_url}})
 
 
