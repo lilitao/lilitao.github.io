@@ -5,7 +5,7 @@ permalink: /about/
 
 ---
 
-### 简介
+#### 简介
 ![李立涛]({{ "/assets/images/priary.png" | absolute_url}})
 
 
@@ -15,13 +15,13 @@ permalink: /about/
 * 2013年入职中山大学系统开发部门。以为从此朝九晚五，岁岁今朝。
 * 2017年生活所迫跳槽，重新开始朝九晚九，天天赶进度的充实生活。
 
-### 我的书*已读/正在/将要*
+#### 书架
 
 <div class="container">
 <div class="row">
 
 <div class="col-sm-6 col-md-4 col-lg-3 postSpan">
-![test-driven-development]({{ "/assets/images/tdd.jpg" | absolute_url}})
+<img src="{{ "/assets/images/tdd.jpg" | absolute_url}}"/>
 </div>
 
 
