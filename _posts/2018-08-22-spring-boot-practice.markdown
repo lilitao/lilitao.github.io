@@ -143,3 +143,47 @@ author: AndyLi
 	<version>${servlet.api.version}</version>
 </dependency>
 ```
+
+* 在`dependencies`里加入所有子项目都需要用到的依赖
+
+项目用到`spring-test` , `mockito` , `junit` 来构建测试框架，加入以下相关依赖包
+
+```xml
+...
+<mockito.version>1.10.19</mockito.version>
+...
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-test</artifactId>
+	<scope>test</scope>
+</dependency>
+<dependency>
+	<groupId>org.springframework</groupId>
+	<artifactId>spring-test</artifactId>
+	<scope>test</scope>
+</dependency>
+<dependency>
+	<groupId>org.mockito</groupId>
+    <artifactId>mockito-all</artifactId>
+    <version>${mockito.version}</version>
+	<scope>test</scope>
+</dependency>
+<dependency>
+	<groupId>junit</groupId>
+	<artifactId>junit</artifactId>
+	<scope>test</scope>
+</dependency>
+```
+
+* 使用`sonarQue`扫描代码缺陷，作为质量内建的工具之一,加入`sonarQue`的依赖
+
+```xml
+...
+<sonar.maven.plugin.version>3.4.0.905</sonar.maven.plugin.version>
+...
+<dependency>
+    <groupId>org.sonarsource.scanner.maven</groupId>
+    <artifactId>sonar-maven-plugin</artifactId>
+    <version>${sonar.maven.plugin.version}</version>
+</dependency>
+```

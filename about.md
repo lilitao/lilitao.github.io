@@ -37,6 +37,20 @@ permalink: /about/
 <img src="{{ "/assets/images/clean-code.jpg" | absolute_url}}" />
 </div>
 
+<div class="col-sm-6 col-md-4 col-lg-3 postSpan">
+<img src="{{ "/assets/images/legacy-cdoe.jpg" | absolute_url}}" />
+</div>
+
+<div class="col-sm-6 col-md-4 col-lg-3 postSpan">
+<img src="{{ "/assets/images/opencv.jpg" | absolute_url}}" />
+</div>
+
+
+<div class="col-sm-6 col-md-4 col-lg-3 postSpan">
+<img src="{{ "/assets/images/jvm.jpg" | absolute_url}}" />
+</div>
+
+
 </div>
 </div>
 
