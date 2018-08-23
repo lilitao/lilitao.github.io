@@ -68,35 +68,35 @@ Copies of this document may be made for your own use and for distribution to oth
 
 4. `Spring Boot`的工作环境
 
-* 构建系统：Maven|Gradle|Ant|Starters
-* 最佳实践:Code Structure|@Configuration|@EnableAutoConfiguration|Beans and Dependency Injection
-* 代码开始环境:IDE|Packaged|Maven|Gradle
+* 构建系统：Maven、Gradle、Ant、Starters
+* 最佳实践:Code Structure、@Configuration、@EnableAutoConfiguration、Beans and Dependency Injection
+* 代码开始环境:IDE、Packaged、Maven、Gradle
 * 应用打包:上线Jars包
 * `Spring Boot`命令行接口(CLI):使用CLI
 
 5. `Spring Boot`主要功能
 
-* 核心功能:SpringApplication|External Configuration | Profiles | Logging
-* Web应用:MVC | 内嵌容器
-* 持久层：SQL | NO-SQL
-* 消息处理: 概述 | JMS
-* 测试: 概述 | `Boot Applications` | 实用工具
-* 扩展: Auto-configuration | @Conditions
+* 核心功能:SpringApplication、External Configuration 、 Profiles 、 Logging
+* Web应用:MVC 、 内嵌容器
+* 持久层：SQL 、 NO-SQL
+* 消息处理: 概述 、 JMS
+* 测试: 概述 、 `Boot Applications` 、 实用工具
+* 扩展: Auto-configuration 、 @Conditions
 
 6. 上线 
 
 当你的`Spring Boot`应用要上线时，有一些技术或技巧你可能会用到：
 
-* Management endpoints:概述 | 客制化
-* 连接选项: HTTP | JMX
-* 监控:Metrucs | Auditing | Tracing | Process
+* Management endpoints:概述 、 客制化
+* 连接选项: HTTP 、 JMX
+* 监控:Metrucs 、 Auditing 、 Tracing 、 Process
 
 7. 高级应用
 
 最后，这些有些高级应用是给技术能力强的高级用户进一步探索
 
-*  `Spring Boot` 应用部署：云部署 | OS Service
-*  构建工具插件: Maven | Gradle
-*  附录: Application Properties | Auto-configuration | Executable Jars
+*  `Spring Boot` 应用部署：云部署 、 OS Service
+*  构建工具插件: Maven 、 Gradle
+*  附录: Application Properties 、 Auto-configuration 、 Executable Jars
 
 ### 第二部分，从这里开始
