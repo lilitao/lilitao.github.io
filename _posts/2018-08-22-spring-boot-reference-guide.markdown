@@ -11,6 +11,14 @@ description: spring boot 参考指南，翻译自官网
 
 [官网原版点这里](https://docs.spring.io/spring-boot/docs/2.0.0.M7/reference/htmlsingle/#howto-initialize-a-spring-batch-database)
 
+2.0.0.M7
+
+Copyright © 2012-2017
+
+Copies of this document may be made for your own use and for distribution to others, provided that you do not charge any fee for such copies and further provided that each copy contains this Copyright Notice, whether distributed in print or electronically.
+
+
+
 目录
 1. Spring Boot文档
    1. 关于本文档
@@ -51,3 +59,44 @@ description: spring boot 参考指南，翻译自官网
 *所有的Spring Boot相关的技术都是开源的，包括文档，如果你在这些文档中发现有问题或者你想改进提高这些文档，请[get involved](https://github.com/spring-projects/spring-boot/tree/v2.0.0.M7)*
 
 3. 第一步
+
+如果你要遵从一般的步骤开始学习`Spring Boot` 、 `Spring`,从下面几个方面入手开始学习。
+
+* 从动手开始：概要|配置要求|安装
+* 指南:第一部分|第二部分
+* 从例子开始:例子1|例子2
+
+4. `Spring Boot`的工作环境
+
+* 构建系统：Maven|Gradle|Ant|Starters
+* 最佳实践:Code Structure|@Configuration|@EnableAutoConfiguration|Beans and Dependency Injection
+* 代码开始环境:IDE|Packaged|Maven|Gradle
+* 应用打包:上线Jars包
+* `Spring Boot`命令行接口(CLI):使用CLI
+
+5. `Spring Boot`主要功能
+
+* 核心功能:SpringApplication|External Configuration | Profiles | Logging
+* Web应用:MVC | 内嵌容器
+* 持久层：SQL | NO-SQL
+* 消息处理: 概述 | JMS
+* 测试: 概述 | `Boot Applications` | 实用工具
+* 扩展: Auto-configuration | @Conditions
+
+6. 上线 
+
+当你的`Spring Boot`应用要上线时，有一些技术或技巧你可能会用到：
+
+* Management endpoints:概述 | 客制化
+* 连接选项: HTTP | JMX
+* 监控:Metrucs | Auditing | Tracing | Process
+
+7. 高级应用
+
+最后，这些有些高级应用是给技术能力强的高级用户进一步探索
+
+*  `Spring Boot` 应用部署：云部署 | OS Service
+*  构建工具插件: Maven | Gradle
+*  附录: Application Properties | Auto-configuration | Executable Jars
+
+### 第二部分，从这里开始
