@@ -62,9 +62,9 @@ Copies of this document may be made for your own use and for distribution to oth
 
 如果你要遵从一般的步骤开始学习`Spring Boot` 、 `Spring`,从下面几个方面入手开始学习。
 
-* 从动手开始：概要|配置要求|安装
-* 指南:第一部分|第二部分
-* 从例子开始:例子1|例子2
+* 从动手开始：概要、配置要求、安装
+* 指南:第一部分、第二部分
+* 从例子开始:例子1、例子2
 
 4. `Spring Boot`的工作环境
 
