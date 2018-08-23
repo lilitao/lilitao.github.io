@@ -187,3 +187,23 @@ author: AndyLi
     <version>${sonar.maven.plugin.version}</version>
 </dependency>
 ```
+* 子项目作为jar包的方式提供组件服务，在`build` `plugins`加入 `maven-jar-plugin`,同时在jar包打包时包括源代码，加入`maven-source-plugin`
+
+```xml
+<plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-jar-plugin</artifactId>
+</plugin>
+<plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-source-plugin</artifactId>
+	<executions>
+     	<execution>
+				<id>attach-sources</id>
+				<goals>
+					<goal>jar</goal>
+				</goals>
+		</execution>
+	</executions>
+</plugin>
+```
