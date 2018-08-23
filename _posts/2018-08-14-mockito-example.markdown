@@ -11,7 +11,7 @@ description: 关于Mockito的常见的使用例子，翻译自官网javadoc
 
 ## 关于Mockito的例子，翻译自官网：[javaDoc](http://static.javadoc.io/org.mockito/mockito-core/2.21.0/org/mockito/Mockito.html)
 
-### mock
+### 1. mock
 下面这个例子mock一个List对象作为演示，实际上，请不要mock一个List,尽量使用一个真实的List对象来完成我们的测试用例 。
 
 ```java
@@ -33,7 +33,7 @@ verify(mockedList).clear();
 
 一旦创建一个mock实例，这个mock实例会记录所有与外部对象之间的交互过程，包括：方法调用、传入参数、调用次数等等。在这些基础上，你可以选择验证你所期望的交互。
 
-### stubbing
+### 2. stubbing
 
 ```java
 //类和接口都可以mock
@@ -62,7 +62,7 @@ verify(mockedList).get(0);
 3. 一旦对某个mock方法stubbed后，那么这个方法调用总是返回一个stubbed值，不管调用多少次，都会返回固定的stubbed值。
 4. 对同一个方法，用相同的参数stubbing，以最后一次以准。
 
-### Argument matchers
+### 3. Argument matchers
 
 当我们对某个方法构建stubbing时，需要指定传入参数来定义来返回特定stubbed对象 , 当test case调用stubbing方法时，mockito据实际传入的传参数来判断需要返回哪个stubbed对象。 mockito使用java内置的equals()方法来对比参数。 但是，有时我们需要再加灵活的参数匹配方式。
 
@@ -102,3 +102,47 @@ verify(mockedList).add(argThat(someString -> someString.length() > 5));
 
 ```
 anyObject(),eq()这两个匹配方法是不会返回一个matchers对象的，他们只是在内部的stack里记一个matcher并且返回一个dummy value(通常是一个null),这样实现的原因是为了应对java编绎器的静态类型安全检查，所以这样的话，我们不能在verified/stubbed方法之外使用anyObject(),eq()两个方法。
+
+### 4. 清确地校验方法调用的次数，或至少多少次，或者一次也没有调用
+
+```java
+//使用mock
+mockedList.add("once");
+
+mockedList.add("twice");
+mockedList.add("twice");
+
+mockedList.add("three times");
+mockedList.add("three times");
+mockedList.add("three times");
+
+//下面验证调用1次, 默认使用time(1)验证调用一次
+verify(mockedList).add("once");
+verify(mockedList,times(1)).add("once");
+
+//精确验证调用次数
+verify(mockedList,times(2)),add("twice");
+verify(mockedList,times(3)).add("three times");
+
+//校验一次都没有调用,never()相当于times(0)
+verify(mockedList,never()),add("never happened");
+
+//校验调用次数的边界值，atLeast()或者atMost()
+verify(mockedList,atLeastOnce()).add("three times");
+verify(mockedList,atLeast(2)).add("three times");
+verify(mockedList,atMost(5)).add("three times");
+```
+
+默认使用times(1)来verify，因此不需要显示使用times(1)
+
+### 5. 通过exceptons来生成没有返回值的方法的stubbing
+
+```java
+doThrow(new RuntimeException()).when(mockedList).clear();
+//下面的代码执行会抛出异常
+mockedList.clear();
+```
+
+第12节是关于doThrow()|doAnswer()等一类方法的详细介绍
+
+### 6. 校验顺序
