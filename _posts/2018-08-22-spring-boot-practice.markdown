@@ -19,6 +19,7 @@ author: AndyLi
 * ehcache配置
 * Swagger2配置
 * MessageResources配置
+* 统一异常处理
 * liquibase
 * JPA data access
 * FeignClient
@@ -36,7 +37,9 @@ author: AndyLi
 
 ![parent project]({{ site.url }}/assets/images/spring-construct.PNG)
 
-#### 关于pom.xml的内容
+#### `Parent`项目
+
+关于pom.xml的内容
 
 * pom文件的`packaging`类型必须是`pom`
 
@@ -175,7 +178,7 @@ author: AndyLi
 </dependency>
 ```
 
-* 使用`sonarQue`扫描代码缺陷，作为质量内建的工具之一,加入`sonarQue`的依赖
+* 使用`sonarQue`扫描代码缺陷，作为质量内建的工具之一,在`dependenies`里加入`sonarQue`的依赖
 
 ```xml
 ...
@@ -207,3 +210,56 @@ author: AndyLi
 	</executions>
 </plugin>
 ```
+
+以上为parent项目的基本结构完成，但是一些其他应用的plugin还没有加入，比如`maven-javadoc-plugin` , `maven-surefire-plugin` , `jacoco-maven-plugin` 等，我在用到这些插件再添加。
+开始下一步之前，首先在`parent`项目里运行`mvn install`命令，下载相关依赖和插件。
+
+#### `ERP`项目
+
+新建 `ERP`项目 ,这是一个聚合项目`ERP`包括`CRM`子项目,项目结构如下：
+
+![erp]({{ site.url }}/assets/images/spring-construct-erp.PNG "erp")
+
+pom.xml文件内容
+
+maven项目类型
+```xml
+<packaging>pom</packaging>
+```
+
+`ERP`继承`Parent`项目
+
+```xml
+<parent>
+      <groupId>com.ay</groupId>
+      <artifactId>Ay_Parent</artifactId>
+      <version>1.0-SNAPSHOT</version>
+</parent>
+```
+
+`erp`作为一个web application,为每个子项目引入`spring-boot-starter-web`,同时使用`logback`日志，引用`logback-classic`。
+我们使用前后面后离的开发模式，后端应用引用swagger UI管理rest-API,引入`swagger-annotations`。
+在`dependencies`加入以下依赖。
+```xml
+<dependency>
+	<groupId>ch.qos.logback</groupId>
+	<artifactId>logback-classic</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<dependency>
+	<groupId>io.swagger</groupId>
+	<artifactId>swagger-annotations</artifactId>
+	<version>1.5.3</version>
+</dependency>
+```
+
+* 默认情况下,引入`spring-boot-starter-web`后，`Spring Boot`会为我们引入以下几个包
+  > org.springframework.boot:spring-boot-starter
+    |--org.springframework.boot:spring-boot
+    |--org.springframework.boot:spring-boot-autoconfigure
+    |--org.springframework.boot:spring-boot-starter-logging
+    |--org.springframework.boot:spring-core
+    |--org.yaml:snakeyaml
