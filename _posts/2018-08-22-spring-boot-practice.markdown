@@ -256,10 +256,24 @@ maven项目类型
 </dependency>
 ```
 
-* 默认情况下,引入`spring-boot-starter-web`后，`Spring Boot`会为我们引入以下几个包
+* 默认情况下,引入`spring-boot-starter-web`后，`Spring Boot`还会为我们引入以下几个包
   > org.springframework.boot:spring-boot-starter
     |--org.springframework.boot:spring-boot
     |--org.springframework.boot:spring-boot-autoconfigure
     |--org.springframework.boot:spring-boot-starter-logging
     |--org.springframework.boot:spring-core
     |--org.yaml:snakeyaml
+
+### 新建`ERP`子模块
+
+按功能职责分成以下几个模块
+
+* `Ay_Crm`核心业务逻辑,通过restfull-API对外提供服务
+* `CRM_Client` 提供`FeignClient`接口
+* `CRM_DataAccess` 提供持久层服务
+* `CRM_Web`负责打包运行web application服务
+
+#### `CRM_Web`模块
+
+
+
