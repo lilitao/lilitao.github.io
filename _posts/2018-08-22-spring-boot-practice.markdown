@@ -266,14 +266,16 @@ maven项目类型
 
 ### 新建`ERP`子模块
 
+![erp-module]({{ "/assets/images/spring-construct-erp-module.png" | absolute_url }})
+
 按功能职责分成以下几个模块
 
-* `Ay_Crm`核心业务逻辑,通过restfull-API对外提供服务
-* `CRM_Client` 提供`FeignClient`接口
-* `CRM_DataAccess` 提供持久层服务
-* `CRM_Web`负责打包运行web application服务
+* `Ay_CRM`核心CRM业务逻辑,通过restfull-API对外提供服务
+* `ERP_Client` 提供`FeignClient`接口
+* `ERP_DataAccess` 提供持久层服务
+* `ERP_Web`负责打包运行web application服务
 
-#### `CRM_Web`模块
+#### `CRM_ERP`模块
 
 
 
