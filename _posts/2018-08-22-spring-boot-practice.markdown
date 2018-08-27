@@ -340,11 +340,11 @@ maven项目类型
 
 * 默认情况下,引入`spring-boot-starter-web`后，`Spring Boot`还会为我们引入以下几个包
   > org.springframework.boot:spring-boot-starter
-    |--org.springframework.boot:spring-boot
-    |--org.springframework.boot:spring-boot-autoconfigure
-    |--org.springframework.boot:spring-boot-starter-logging
-    |--org.springframework.boot:spring-core
-    |--org.yaml:snakeyaml
+    * --org.springframework.boot:spring-boot
+    * --org.springframework.boot:spring-boot-autoconfigure
+    * --org.springframework.boot:spring-boot-starter-logging
+    * --org.springframework.boot:spring-core
+    * --org.yaml:snakeyaml
 
 ### 新建`ERP`子模块
 
@@ -357,7 +357,16 @@ maven项目类型
 * `ERP_DataAccess` 提供持久层服务
 * `ERP_Web`负责打包运行web application服务
 
-#### `CRM_ERP`模块
+#### `ERP_DataAccess`模块
 
+负责`ERP`项目的持久层服务,
+
+#### `ERP_Web`模块
+
+`Web`模块负责配置打包运行`ERP`应用
+
+* application.propertes配置文件
+
+在maven的`resources`目录下新建`application.properties`配置文件。
 
 
