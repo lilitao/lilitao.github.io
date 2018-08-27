@@ -100,3 +100,9 @@ Copies of this document may be made for your own use and for distribution to oth
 *  附录: Application Properties 、 Auto-configuration 、 Executable Jars
 
 ### 第二部分，从这里开始
+
+如果你打算循序渐进地学习`Spring Boot`，`Spring` ,从这一节开始，在这一节回答了几个基本的问题：`是什么`,`怎样么样做`,`为什么`。通过安指令安装`Spring Boot`的方式逐步介绍`Spring Boot`.我们将带领你建立你的第一个`Spring Boot`应用，一边动手一边讨论一些核心的原则
+
+8. `Spring Boot`简单介绍
+
+`Spring Boot`的出现，使得我们建立基于`Spring`的，优秀的，工业级别的，可运行的业务系统，变得简单可行。

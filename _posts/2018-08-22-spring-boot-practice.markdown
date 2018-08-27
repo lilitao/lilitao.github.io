@@ -211,7 +211,89 @@ author: AndyLi
 </plugin>
 ```
 
-以上为parent项目的基本结构完成，但是一些其他应用的plugin还没有加入，比如`maven-javadoc-plugin` , `maven-surefire-plugin` , `jacoco-maven-plugin` 等，我在用到这些插件再添加。
+* 在`build` `plugins`加入`maven-surefire-plugin`，用来运行系统的test case,时同加入`jacoco-maven-plugin`，用来生成代码覆盖率统计数据
+
+```xml
+...
+<plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-surefire-plugin</artifactId>
+	<version>2.18.1</version>
+	<configuration>
+			<failIfNoTests>false</failIfNoTests>
+			<argLine>${surefireArgLine}</argLine>
+			<includes>
+				<include>**/*Test.java</include>
+				<include>**/Test*.java</include>
+			</includes>
+			<excludes>
+				<exclude>**/*IT.java</exclude>
+				<exclude>**/IT*.java</exclude>
+				<exclude>**/*ITCase.java</exclude>
+			</excludes>
+			<skip>${maven.test.skip}</skip>
+			<skipTests>${skipTests}</skipTests>
+	</configuration>
+	<executions>
+			<execution>
+				<id>integration-tests</id>
+				<goals>
+					<goal>test</goal>
+				</goals>
+            	<configuration>
+					<skip>${skipITs}</skip>
+					<includes>
+						<include>**/*IT.java</include>
+						<include>**/IT*.java</include>
+						<include>**/*ITCase.java</include>
+					</includes>
+					<excludes>
+						<exclude>**/*Test.java</exclude>
+						<exclude>**/Test*.java</exclude>
+					</excludes>
+				</configuration>
+			</execution>
+	</executions>
+</plugin>
+<plugin>
+	<groupId>org.jacoco</groupId>
+	<artifactId>jacoco-maven-plugin</artifactId>
+	<version>0.8.1</version>
+	<configuration>
+		<destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
+		<dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
+		<skip>${skipTests}</skip>
+		<output>file</output>
+		<append>true</append>
+	</configuration>
+	<executions>
+		<execution>
+			<id>pre-unit-test</id>
+			<goals>
+				<goal>prepare-agent</goal>
+			</goals>
+			<configuration>
+				<propertyName>surefireArgLine</propertyName>
+		    </configuration>
+		</execution>
+			<execution>
+				<id>post-unit-test</id>
+				<phase>test</phase>
+				<goals>
+		        	<goal>report</goal>
+				</goals>
+				<configuration>
+					<outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+				</configuration>
+			</execution>
+		</executions>
+</plugin>
+```
+
+> `surefireArgLine`由`jacoco-maven-plugin`设置值，提供`maven-surefire-plugin`使用，使`jacoco`可以抓取test case执行时的统计数据
+
+
+以上为parent项目的基本结构完成，但是一些其他应用的plugin还没有加入，比如`maven-javadoc-plugin`  等，我在用到这些插件再添加。
 开始下一步之前，首先在`parent`项目里运行`mvn install`命令，下载相关依赖和插件。
 
 #### `ERP`项目
