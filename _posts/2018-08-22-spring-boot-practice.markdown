@@ -215,6 +215,11 @@ author: AndyLi
 
 ```xml
 ...
+<surefireArgLine></surefireArgLine>
+<maven.test.skip>false</maven.test.skip>
+<skipTests>false</skipTests>
+<skipITs>false</skipITs>
+...
 <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
 	<artifactId>maven-surefire-plugin</artifactId>
@@ -272,6 +277,7 @@ author: AndyLi
 			<goals>
 				<goal>prepare-agent</goal>
 			</goals>
+            <phase>compile</phase>
 			<configuration>
 				<propertyName>surefireArgLine</propertyName>
 		    </configuration>
@@ -292,6 +298,21 @@ author: AndyLi
 
 > `surefireArgLine`由`jacoco-maven-plugin`设置值，提供`maven-surefire-plugin`使用，使`jacoco`可以抓取test case执行时的统计数据
 
+在`pluginManagement` `plugins`加入`liquibase-maven-plugin`用来管理database的持续开发与集成
+
+```xml
+...
+<pluginManagement>
+     <plugins>
+          <plugin>
+              <groupId>org.liquibase</groupId>
+              <artifactId>liquibase-maven-plugin</artifactId>
+          </plugin>
+     </plugins>
+....
+</pluginManagement>
+...
+```
 
 以上为parent项目的基本结构完成，但是一些其他应用的plugin还没有加入，比如`maven-javadoc-plugin`  等，我在用到这些插件再添加。
 开始下一步之前，首先在`parent`项目里运行`mvn install`命令，下载相关依赖和插件。
@@ -359,7 +380,86 @@ maven项目类型
 
 #### `ERP_DataAccess`模块
 
-负责`ERP`项目的持久层服务,
+负责`ERP`项目的持久层服务,`DataAccess`使用 `Spring JAP`抽象关系统数据库的访问。首先作为`Spring Boot`项目，先引入依赖:`spring-boot-starter`,同时因为maven的传递依赖，同时也会引入`Spring Boot`的几个核心包：`spring-boot`,`spring-boot-autoconfugure`,`spring-boot-starter-loggin`,`spring-core`,`snakeyaml`
+```xml
+...
+ <dependency>
+     <groupId>org.springframework.boot</groupId>
+     <artifactId>spring-boot-starter</artifactId>
+ </dependency>
+...
+```
+
+引入`spring-boot-starter-data-jpa`包与`sqljdbc4`包，基于sql server关系数据库开发
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+<dependency>
+    <groupId>com.microsoft.sqlserver</groupId>
+    <artifactId>sqljdbc4</artifactId>
+</dependency>
+```
+database unit test使用liquibase与h2内存数据库,引入相关的包
+```xml
+ <dependency>
+      <groupId>org.liquibase</groupId>
+      <artifactId>liquibase-core</artifactId>
+      <scope>test</scope>
+ </dependency>
+ <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <scope>test</scope>
+ </dependency>
+```
+因为只在test阶段使用，所以`liuqibase-core`, `h2`的`scope`是test
+
+引入`liquibase-maven-plugin`插件，管理database的持续集成与开发
+
+```xml
+ <properties>
+        <liquibase.action>updateSQL</liquibase.action>
+    </properties>
+    <profiles>
+        <profile>
+            <id>updateSQL</id>
+            <properties>
+                <liquibase.action>updateSQL</liquibase.action>
+            </properties>
+        </profile>
+        <profile>
+            <id>update</id>
+            <properties>
+                <liquibase.action>update</liquibase.action>
+            </properties>
+        </profile>
+    </profiles>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <configuration>
+                    <propertyFileWillOverride>true</propertyFileWillOverride>
+                    <propertyFile>src/main/resources/liquibase.properties</propertyFile>
+                    <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>${liquibase.action}</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+```
+运行`mvn package -P update`就可以将liuqibase的change set执行并应用到db；`mvn package -P updateSQL`就可以对比change set与db之间的差异并生成sql 脚本，以便检查并手动执行chnage set。
 
 #### `ERP_Web`模块
 
