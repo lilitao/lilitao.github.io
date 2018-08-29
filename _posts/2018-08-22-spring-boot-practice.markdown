@@ -520,7 +520,7 @@ referenceUrl: hibernate:spring:com.ay.erp.dao.persistence?dialect=org.hibernate.
 diffChangeLogFile: src/main/resources/liquibase-diff-changeLog.xml
 ```
 
-动行maven命令`mvn liquibase:diff`，即可以`liquibase-diff-changeLog.xml`文件中生成关于`spring:com.ay.erp.dao.persistence`包下的java persistence object与db之间的差异了，最后打开文件`liquibase-diff-changeLog.xml`作出必要的修改，整合成我们需要的changelog格式。
+运行maven命令`mvn liquibase:diff`，即可以`liquibase-diff-changeLog.xml`文件中生成关于`spring:com.ay.erp.dao.persistence`包下的java persistence object与db之间的差异了，最后打开文件`liquibase-diff-changeLog.xml`作出必要的修改，整合成我们需要的changelog格式。
 
 java persistence object的格式大概如下：
 
