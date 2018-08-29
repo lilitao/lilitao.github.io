@@ -679,4 +679,99 @@ public class CustomerPoRepositoryTest {
 
 在maven的`resources`目录下新建`application.properties`配置文件。
 
+关于`application.properties`的详细配置项信息，[请点这里查看](https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html)
+
+![properties]({{ "assets/immages/spring-properties.png" | absolute_url }})
+
+完成Spring Boot配置文件后，新建Spring Boot启动类`@SpringBootApplication`
+
+```java
+@SpringBootApplication(scanBasePackages = "com.ay")
+@EnableCaching
+@EnableTransactionManagement
+@Slf4j
+public class ErpApp {
+    public static void main( String[] args ){
+        SpringApplication.run(ErpApp.class, args);
+    }
+    /**
+     *  create a CommandLineRunner to initiate application during application context starting
+     * @param context spring application context
+     * @return CommandLineRunner using to take action of initiation
+     */
+    @Bean
+    public CommandLineRunner commandLineRunner(ApplicationContext context) {
+        return args -> {
+            log.info("inspect the beans provided by Spring Boot:");
+
+            String[] beanNames = context.getBeanDefinitionNames();
+            Arrays.sort(beanNames);
+            for (String beanName : beanNames) {
+                log.info(beanName);
+            }
+
+        };
+    }
+}
+
+```
+
+使用`SwaggerUI`管理restful API
+
+加`Swagger`相关依赖包
+
+```xml
+...
+		<dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.6-jre</version>
+        </dependency>
+...
+``` 
+
+新增`Swagger`关于Spring Boot的配置
+
+```java
+@Configuration
+@EnableSwagger2
+public class SwaggerConfig {
+	
+	@Bean
+	public Docket createDocket() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.apiInfo(createApiInfo())
+				.select()
+				//select()method return back  ApiSelectorBuilder instance to control which API should be shown using Swagger , in this configuration we will scan the the class underlyying specifical package
+				//，Swagger will scan all the controller under package:com.aiatss.coast to create document except for method annotated @ApiIgnore
+				.apis(RequestHandlerSelectors.basePackage("com.ay"))
+				.paths(PathSelectors.any())
+				.build();
+	}
+
+	private ApiInfo createApiInfo() {
+		return  new ApiInfoBuilder()
+				.title("restful API")
+				//.description("")
+				.termsOfServiceUrl("http://google.com")
+				//.contact("COAST NFR")
+				.version("0.0.1-SNAPSHOT")
+				.build();
+	}
+}
+```
+
+通过Spring Boot的启动类启动`ErpApp`,并在浏览器输入地址：http://localhost:8080/swagger-ui.html 即可访问swagger ui主界面
+
 

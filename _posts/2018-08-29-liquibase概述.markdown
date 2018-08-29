@@ -28,3 +28,6 @@ description: Liquibase概述，列举了Liquibase的通常使用场景，翻译�
 ```
 
 更新的版本，请点[这里](http://mvnrepository.com/artifact/org.liquibase/liquibase-core)查看
+
+> 更多关于Liquibase的功能简介
+  * 
