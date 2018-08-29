@@ -461,6 +461,216 @@ database unit test使用liquibase与h2内存数据库,引入相关的包
 ```
 运行`mvn package -P update`就可以将liuqibase的change set执行并应用到db；`mvn package -P updateSQL`就可以对比change set与db之间的差异并生成sql 脚本，以便检查并手动执行chnage set。
 
+通过以上的配置，我们就可以使用liquibase管理和续持集成开发database。但在实际开过程中，我们会发现：当我们在java persistence object里定义了db的结构，再把这种定义用xml的形式翻译成liquibase的changelog,liquibase再把changelog应用到db。在java persistence object，xml,db之间，用三种不同的形式描述相同的db结构。我们期望只维护一种表达形式（java），其他两种表达形式可以由工具帮我们自动维护，xml与db之间由liquibase自动帮我们管理，但是java与xml之间到目前为止，还没有自动管理手段。liquibase提供了一个插件帮我们从java persistence object生成changelog:`liquibase-hibernate5`,我们修改`liquibase-maven-plugin`配置加入相关依赖，如下：
+
+```xml
+....
+			<liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
+        	<spring.jpa.version>2.0.6.RELEASE</spring.jpa.version>	
+			<plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <configuration>
+                    <propertyFileWillOverride>true</propertyFileWillOverride>
+                    <propertyFile>src/main/resources/liquibase.properties</propertyFile>
+                    <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>${liquibase.action}</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.liquibase.ext</groupId>
+                        <artifactId>liquibase-hibernate5</artifactId>
+                        <version>${liquibase-hibernate5.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-beans</artifactId>
+                        <version>${spring.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.springframework.data</groupId>
+                        <artifactId>spring-data-jpa</artifactId>
+                        <version>${spring.jpa.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-core</artifactId>
+                        <version>${spring.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                        <version>${spring.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+```
+
+在`liquibase.properties`配置文件加入配置：
+
+```properties
+referenceUrl: hibernate:spring:com.ay.erp.dao.persistence?dialect=org.hibernate.dialect.SQLServerDialect
+diffChangeLogFile: src/main/resources/liquibase-diff-changeLog.xml
+```
+
+动行maven命令`mvn liquibase:diff`，即可以`liquibase-diff-changeLog.xml`文件中生成关于`spring:com.ay.erp.dao.persistence`包下的java persistence object与db之间的差异了，最后打开文件`liquibase-diff-changeLog.xml`作出必要的修改，整合成我们需要的changelog格式。
+
+java persistence object的格式大概如下：
+
+```java
+@Entity()
+@Table(name = "ayErpCustomer"
+,indexes = {
+        @Index(name = "pk_ayErpCustomer_id",columnList = "id asc",unique = true),
+        @Index(name = "index_ayErpCustomer_id_name_birthday",columnList = "id desc,name desc,birthday desc",unique = false)
+}
+,uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"id"},name ="constraint_ayErpCustomer_id")
+}
+)
+@Setter
+@Getter
+public class ErpCustomerPo extends BasePo {
+
+    @TableGenerator(name = "ayErpCustomerGenerator", table = TABLE_NAME, pkColumnName = PK_COLUMN_NAME, valueColumnName = VALUE_COLUMN_NAME, initialValue = 0, allocationSize = 100)
+    @GeneratedValue(generator = "ayErpCustomerGenerator",strategy = GenerationType.TABLE)
+    @Id
+    @Column(name = "id",columnDefinition = DaoConstant.BIGINT,nullable = false)
+    private Long id;
+
+    @Column(name = "name", columnDefinition = DaoConstant.VARCHAR, length = 100, nullable = false)
+    private String name;
+
+    @Column(name = "sex",columnDefinition = DaoConstant.CHAR,length = 1,nullable = false)
+    private String sex;
+
+    @Column(name = "birthday",columnDefinition = TIMESTAMP,nullable = true)
+    private Date birthday;
+
+    @Column(name = "personalPhone",columnDefinition = VARCHAR,nullable = true,length = 20)
+    private String personalPhone;
+
+    @Column(name = "busniessPhone",columnDefinition = VARCHAR,nullable = true,length = 20)
+    private String busniessPhone;
+
+    @Column(name = "officeAddress",columnDefinition = VARCHAR,nullable = true,length = 150)
+    private String officeAddress;
+
+    @Column(name = "homeAddress",columnDefinition = VARCHAR,nullable = true,length = 150)
+    private String homeAddress;
+}
+```
+
+* DB unit test
+
+DB unit test是基于Spring Boot使用liquibase 和h2内存数据库构建不依赖外部的测试环境，首先在`test->java`包下建`Spring Boot`的启动类仅用于DB unit test
+
+```java
+@SpringBootApplication
+@ComponentScan(basePackages = "com.ay.erp.dao",useDefaultFilters = false,
+        includeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Repository.class)
+        })
+@EntityScan(basePackages = "com.ay.erp.dao")
+public class DbUnitConfig {
+}
+```
+
+![DbUnitConfig]({{ "assets/images/spring-dbUnitConfig.png" | absolute_url }})
+
+DB unit test需要依赖`DbUnitConfig`的配置启动
+
+添加Spring Boot和liquibase的启动配置文件`test/java/resources/application.yml`,如上图所示,内容如下,
+
+```properties
+logging:
+  level:
+    org.springframework: DEBUG
+    com.ay: DEBUG
+    liquibase: DEBUG
+    org.h2: DEBUG
+
+spring:
+  liquibase:
+    change-log: classpath:db.changeog.erp.test.master.xml
+    contexts: UT
+    enabled: true
+    drop-first: false
+  jpa:
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      naming:
+#      This is needed, otherwise hibernate will change the table name in SQL. Such as: change TblAddress to tbl_address
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+```
+
+建立liquibase changelog配置文件`db.changeog.erp.test.master.xml`,这个文件直接引用`main/resources/db.changelog.erp.master.xml`文件，使已经配置好的changelog文件集合
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <include file="db.changelog.erp.master.xml"></include>
+</databaseChangeLog>
+```
+配置完成，开始第一个test case
+```java
+@RunWith(SpringRunner.class)
+@DataJpaTest
+@Transactional
+public class CustomerPoRepositoryTest {
+
+    @Autowired
+    CustomerPoRepository repository;
+
+    @Test
+    public void should_save_and_find_success() {
+        //given
+        ErpCustomerPo po = createPersistenceObject();
+
+        //when
+        repository.save(po);
+        Optional<ErpCustomerPo> result = repository.findById(po.getId());
+        //then
+        Assertions.assertThat(repository.count()).isEqualTo(1);
+        Assertions.assertThat(result.get().getId()).isEqualTo(po.getId());
+    }
+
+    @Test
+    public void should_delete_success() {
+        //given
+        ErpCustomerPo po = createPersistenceObject();
+        repository.save(po);
+        //when
+        repository.delete(po);
+        //then
+        Assertions.assertThat(repository.count()).isEqualTo(0);
+    }
+
+    private ErpCustomerPo createPersistenceObject() {
+        ErpCustomerPo po = new ErpCustomerPo();
+        po.setBirthday(new Date());
+        po.setBusniessPhone("123");
+        po.setHomeAddress("11");
+        po.setName("AndyLi");
+        po.setOfficeAddress("chinase");
+        po.setSex("M");
+        po.setRecordStatus("A");
+        return po;
+    }
+}
+```
+
 #### `ERP_Web`模块
 
 `Web`模块负责配置打包运行`ERP`应用
