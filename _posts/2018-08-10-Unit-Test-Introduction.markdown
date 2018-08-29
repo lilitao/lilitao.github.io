@@ -3,6 +3,8 @@ layout: post
 title: unit test introduction
 date: 2018-08-10
 categories: unit test
+author: 
+
 ---
 
 
@@ -20,18 +22,18 @@ public void should_pring_success_given_list(){
    assertThat(result).contains("milk","book");
 } 
 ```
-It is just plain java method with a test annotation on it.
+There is just plain java method in `JUnit`.
 
-It should have three standard parts, given, when, then, the given part prepares the precondition of the test, the when part call the method to be tested, and the then part just verifies if the result is as expected. 
+It should have three standard parts, given, when, then. The given part prepares the precondition for the test, the when part call the method to be tested, and the then part just verifies whether the result is as expected. 
 
-When used in project, the comments of given, when, then in the above example should not be added, for it is just for educating purpose.
+The method name should  express intention of busniess, telling other developer what the UT will testing.
 
 
 ## compare UT with other tests
 
 ### what does it mean by "unit" of a unit test
 
-1.  unit tests are low-level , focusing on a small functional point
+1.  unit tests are low-level , focusing on a small,single functional point
 2.  unit tests should completed by developer who are responsible for implement functionality
 3.  unit testes should run faster more than other kinds of tests , like : Service Tests , UI tests
 
@@ -41,8 +43,7 @@ When used in project, the comments of given, when, then in the above example sho
 
 ![unit-test-compare-with-other-tests]({{ site.url }}/assets/images/image-unit-test.png "unit test compare with other tests")
 
-Unit tests usually tests the functionality olny includes POJO and is the faster , A unit test's cover range is small . The numbers of unit tests is the bigger . the coverage can give is high
-The other types of test  , including service test and UI test , can only provide  limited coverage rate , and their coast are higher , so their amount is relatively smaller , and they are run slowly , so they can not give a feedback quickly to the developer.
+Unit tests usually tests the functionality small single , A unit test's cover range is small . The numbers of unit tests is the bigger . The coverage of UT  is higher then other kinds of test  , including service test and UI test .Those , like UI test,service test, coast are more expensive , so their amount are relatively smaller . Because of  running slowly  ,the cost too expensive to running during development
 
 ![business/technology facing]({{ site.url }}/assets/images/unit-test-business-facing.jpg "business technology facing")
 
