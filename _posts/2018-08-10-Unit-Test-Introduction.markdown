@@ -43,7 +43,7 @@ The method name should  express intention of busniess, telling other developer w
 
 ![unit-test-compare-with-other-tests]({{ site.url }}/assets/images/image-unit-test.png "unit test compare with other tests")
 
-Unit tests usually tests the functionality small single , A unit test's cover range is small . The numbers of unit tests is the bigger . The coverage of UT  is higher then other kinds of test  , including service test and UI test .Those , like UI test,service test, coast are more expensive , so their amount are relatively smaller . Because of  running slowly  ,the cost too expensive to running during development
+Unit tests usually tests the functionality small single , A unit test's cover range is small . The numbers of unit tests is the bigger . The coverage of UT  is higher then other kinds of test  , including service test and UI test .Those , like UI test,service test, coast are more expensive , so their amount are  smaller . Because of  running slowly  ,the cost too expensive to running during development
 
 ![business/technology facing]({{ site.url }}/assets/images/unit-test-business-facing.jpg "business technology facing")
 
