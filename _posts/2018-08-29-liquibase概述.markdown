@@ -93,5 +93,110 @@ liquibase.change-log=classpath:liquibase-changeLog.xml
 
 5. 使用Maven plugin来生成`change log`文件
 
+我们可以使用Liquibase Maven plugin来生成`chnage log`，替代手动编写`change log`，节省不少时间。
+
+5.1 配置插件
+
+在pom.xml里加入如下Liquibase配置
+
+```xml
+<dependency>
+    <groupId>org.liquibase</groupId>
+    <artifactId>liquibase-maven-plugin</artifactId>
+    <version>3.4.1</version>
+</dependency> 
+...
+<plugins>
+    <plugin>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-maven-plugin</artifactId>
+        <version>3.4.1</version>
+        <configuration>                  
+            <propertyFile>src/main/resources/liquibase.properties</propertyFile>
+        </configuration>                
+    </plugin> 
+</plugins>
+```
+
+
+5.2 从已经存在的数据库结构里生成`change log`
+
+配置好上面的插件后，用`liquibase-mavin-plugin`的`generateChangeLog`这个goal从已经存在的数据库结构生成`chnage log`
+
+```bash
+mvn liquibase:generateChangeLog
+```
+在运行上面的maven命令之前，首先需要在`liquibase.properties`配置文件里加入以下配置
+```properties
+url=jdbc:mysql://localhost:3306/oauth_reddit
+username=tutorialuser
+password=tutorialmy5ql
+driver=com.mysql.jdbc.Driver
+outputChangeLogFile=src/main/resources/liquibase-outputChangeLog.xml
+```
+最终产生的`changeLog`文件，可以用来作为另一个数据库的初始化脚本，或者用来导入数据到另一个相同结构的数据库。生成的`chnagelog`文件看起来应该像下面这段xml代码。
+
+```xml
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog ...>
+     
+    <changeSet author="John (generated)" id="1439225004329-1">
+        <createTable tableName="APP_USER">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="accessToken" type="VARCHAR(255)"/>
+            <column name="needCaptcha" type="BIT(1)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)"/>
+            <column name="refreshToken" type="VARCHAR(255)"/>
+            <column name="tokenExpiration" type="datetime"/>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="preference_id" type="BIGINT"/>
+            <column name="address" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    ...
+</databaseChangeLog>
+```
+
+5.3 生成一`chnage log`文件，显示两个数据库之间存在的差异
+
+如果我们现在手头上有两个版本数据库结构，但是，由于数据库开发演化过程中没有同步好，我们现在不清楚两个数据库版本之间存在哪些差异。我们可以使用这个插件，生成一个`chnage log`文件，包括了两个已经存数据库版本之间有哪些差异（比如，最常见的就是一个是开发时用的数据库，一个是正在生产使用的版本）。
+
+```bash
+mvn liquibase:diff
+```
+
+下面是`liquibase.properties`文件的配置
+
+```properties
+changeLogFile=src/main/resources/liquibase-changeLog.xml
+url=jdbc:mysql://localhost:3306/oauth_reddit
+username=tutorialuser
+password=tutorialmy5ql
+driver=com.mysql.jdbc.Driver
+referenceUrl=jdbc:h2:mem:oauth_reddit
+diffChangeLogFile=src/main/resources/liquibase-diff-changeLog.xml
+referenceDriver=org.h2.Driver
+referenceUsername=sa
+referencePassword=
+```
+生成出来的`change log`文件应该跟下面的代码片段相似。
+```xml
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog ...>
+    <changeSet author="John" id="1439227853089-1">
+        <dropColumn columnName="address" tableName="APP_USER"/>
+    </changeSet>
+</databaseChangeLog>
+```
+
+这是一个十分有用的方法，在持续开发演化你的数据库结构--比如：让hibernate自动生成一个数据库结构脚本用来搭建开发环境，然后用这个来作来针对旧数据库结构的参考
+
+6. 使用Liquibase Hibernate 插件
 
 
