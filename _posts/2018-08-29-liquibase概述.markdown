@@ -14,7 +14,7 @@ description: Liquibase概述，列举了Liquibase的通常使用场景，翻译�
 
 [Liquibase官网](http://www.liquibase.org/)
 
-1. 概述
+#### 1. 概述
 
 这是一篇简略的使用指南，我们使用`Liquibase`来持续开发演进java应用程序的数据库的结构。我首先来看下java应用是怎么整合使用`Liquibase`，接着是来看关于Spring,Hibernate与`Liquibase`的整合。
 
@@ -36,7 +36,7 @@ description: Liquibase概述，列举了Liquibase的通常使用场景，翻译�
   * [Database Migrations with Flyway](https://www.baeldung.com/database-migrations-with-flyway)
   * [Quick guide on Loading Inital Data With Spring Boot](https://www.baeldung.com/spring-boot-data-sql-and-schema-sql)
 
-2. Change Log文件
+#### 2. Change Log文件
 
 我们先看个简单的 *changeLog* 文件--这个 `changeLog`文件只是简单在在table `user`里新增一个字段`address`
 
@@ -64,7 +64,7 @@ description: Liquibase概述，列举了Liquibase的通常使用场景，翻译�
 
 让我们看下怎么把上面的`change log`加入到我们的应用里并确保它在应用起动时被执行
 
-3. 使用Spring Bean配置并运行Liquibase
+#### 3. 使用Spring Bean配置并运行Liquibase
 
 第一次执行方法，配置一个Spring Bean在Spring Boot应用启动时执行`change log`。当然还有其他方法，但是如果我们使用Spring开发我们的应用时，这是一种简单实用的方法。
 
@@ -79,7 +79,7 @@ public SpringLiquibase liquibase() {
 ```
 > 注意：我们引用的`change log`文件`liquibase-changeLog.xml`要在运行前被加入到我们的class path里。
 
-4. Spring Boot整合并运行Liquibase
+#### 4. Spring Boot整合并运行Liquibase
 
 如果你正在使用Spring Boot作为开发框架，只需要简单的配置，甚至不需要为Liquibase定义一个Bean
 
@@ -91,11 +91,11 @@ public SpringLiquibase liquibase() {
 liquibase.change-log=classpath:liquibase-changeLog.xml
 ```
 
-5. 使用Maven plugin来生成`change log`文件
+#### 5. 使用Maven plugin来生成`change log`文件
 
 我们可以使用Liquibase Maven plugin来生成`chnage log`，替代手动编写`change log`，节省不少时间。
 
-5.1 配置插件
+##### 5.1 配置插件
 
 在pom.xml里加入如下Liquibase配置
 
@@ -119,7 +119,7 @@ liquibase.change-log=classpath:liquibase-changeLog.xml
 ```
 
 
-5.2 从已经存在的数据库结构里生成`change log`
+##### 5.2 从已经存在的数据库结构里生成`change log`
 
 配置好上面的插件后，用`liquibase-mavin-plugin`的`generateChangeLog`这个goal从已经存在的数据库结构生成`chnage log`
 
@@ -163,7 +163,7 @@ outputChangeLogFile=src/main/resources/liquibase-outputChangeLog.xml
 </databaseChangeLog>
 ```
 
-5.3 生成一`chnage log`文件，显示两个数据库之间存在的差异
+##### 5.3 生成一`chnage log`文件，显示两个数据库之间存在的差异
 
 如果我们现在手头上有两个版本数据库结构，但是，由于数据库开发演化过程中没有同步好，我们现在不清楚两个数据库版本之间存在哪些差异。我们可以使用这个插件，生成一个`chnage log`文件，包括了两个已经存数据库版本之间有哪些差异（比如，最常见的就是一个是开发时用的数据库，一个是正在生产使用的版本）。
 
@@ -197,6 +197,8 @@ referencePassword=
 
 这是一个十分有用的方法，在持续开发演化你的数据库结构--比如：让hibernate自动生成一个数据库结构脚本用来搭建开发环境，然后用这个来作来针对旧数据库结构的参考
 
-6. 使用Liquibase Hibernate 插件
+#### 6. 使用Liquibase Hibernate 插件
+
+
 
 
