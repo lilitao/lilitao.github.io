@@ -1,7 +1,7 @@
 ---
 
 layout: post
-title: Liquibase概述
+title: Liquibase in practice
 date: 2018-08-29
 categories: liquibase 
 description: Liquibase概述，列举了Liquibase的通常使用场景，翻译国外技术文章
