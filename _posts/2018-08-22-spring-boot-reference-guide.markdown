@@ -105,4 +105,9 @@ Copies of this document may be made for your own use and for distribution to oth
 
 8. `Spring Boot`简单介绍
 
-`Spring Boot`的出现，使得我们建立基于`Spring`的，优秀的，工业级别的，可运行的业务系统，变得简单可行。
+`Spring Boot`的出现，使得我们建立基于`Spring`的，优秀的，工业级别的，可运行的业务系统，变得简单可行。我们专注于Spring平台和第三方libraries，使你以最小的投入经过短暂的学习就可以开始`Spring Boot`的开发。大多数的`Spring Boot`应用只需要很少的配置就可以运行。
+
+你可以使用`Spring Boot`来生成一个普通的java应用程序，可以用`java -jar`命令运行，或者打包成传统的`war`包发布。同时我们也提供命令行工具用来运行Spring脚本。
+
+我们这份文档的主要目标是：
+* 为Spring的开始人员提供一快速的，易于理解的快速入门的经历实践。
