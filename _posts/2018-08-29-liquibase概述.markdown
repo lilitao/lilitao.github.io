@@ -199,6 +199,68 @@ referencePassword=
 
 #### 6. 使用Liquibase Hibernate 插件
 
+如果你的应用使用了`Hibernate`-接下来，我们来看下一个非常有用的生成`change log`的方法。
+
+首先-下面是[liquibase-hibernate plugin](https://github.com/liquibase/liquibase-hibernate/wiki)在maven里的配置
+
+##### 6.1 插件配置
+
+首先，让我们看来最新版本的插件配置，还有需要用到的依赖
+
+```xml
+<plugins>
+    <plugin>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-maven-plugin</artifactId>
+        <version>3.4.1</version>
+        <configuration>                  
+            <propertyFile>src/main/resources/liquibase.properties</propertyFile>
+        </configuration> 
+        <dependencies>
+            <dependency>
+                <groupId>org.liquibase.ext</groupId>
+                <artifactId>liquibase-hibernate4</artifactId>
+                <version>3.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>4.1.7.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-jpa</artifactId>
+                <version>1.7.3.RELEASE</version>
+            </dependency>
+        </dependencies>               
+    </plugin> 
+</plugins>
+```
+
+##### 6.2 对比数据库与Jpa Entities之间的差异，且生成差异的`change log`
+
+这个插件很有趣，我们可以用这个插件对比已经存在的数据库（例如生产数据库）和最新的java persistence entities对象之间的差异，并生成差异部分的`changeLog`
+
+简单的举个例子--一旦你改了某个entity，你可以简单容易地生成一个反映这次修改的`change log`文件，通过对比旧的数据库结构，这是一个简结，实用的方法用来演化你的数据库结构，
+
+在liquibase 的配置文件里加入以下配置
+
+```xml
+changeLogFile=classpath:liquibase-changeLog.xml
+url=jdbc:mysql://localhost:3306/oauth_reddit
+username=tutorialuser
+password=tutorialmy5ql
+driver=com.mysql.jdbc.Driver
+referenceUrl=hibernate:spring:org.baeldung.persistence.model?dialect=org.hibernate.dialect.MySQLDialect
+diffChangeLogFile=src/main/resources/liquibase-diff-changeLog.xml
+```
+注意：`referenceUrl`用来扫描包下面的类，所以`dialect`参数是是必须的。
+
+#### 7. 结论
+
+在这篇指导文章里，我们介绍说明了几种使用Liquibase的方法，这些方法是安全成熟可靠的，用来演化，重构数据库结构
+
+文单的代码可以在原作者的[github](https://github.com/Baeldung/reddit-app)里找到，这是一个基于Eclipse的项目，所以很容易导入Eclipse并运行。
 
 
 
