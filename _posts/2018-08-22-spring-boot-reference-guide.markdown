@@ -111,3 +111,5 @@ Copies of this document may be made for your own use and for distribution to oth
 
 我们这份文档的主要目标是：
 * 为Spring的开始人员提供一快速的，易于理解的快速入门的经历实践。
+* 坚持开箱即用的原则，但是可以快速的覆盖默认配置
+* 
