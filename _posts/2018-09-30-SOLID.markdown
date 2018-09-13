@@ -42,3 +42,87 @@ description: 面象设计的五大原则S.O.I.D
 ![rectangle-what]({{ "assets/images/solid-single-responsibility-what.png" | absolute_url }})
 
 在单一职责原则里，职责的定义是“变化的原因”。如果你有多于一个动机去修改一个类，那么这个类就是多于一个职责。
+
+再看一个例子
+
+```java
+
+interface Modem
+
+{
+
+    public void dial(String pno);
+
+    public void hangup();
+
+ 
+
+    public void send(char c);
+
+    public char recv();
+
+}
+
+```
+
+上面的Modem接口违反了单一职责原则，拨号和挂钩断应该是针对连接的管理，而发送和接收方式应该是针对内容的管理.
+
+让我们重构成如下：
+
+！[dialog](( "assets/images/image-single-responsibity.png" | absolute_url ))
+
+我们两部分职责分拆到两个不同的接口，但是Modem接口还是实现了两部分职责，那么是否需要据Modem的实现也拆开，我们需要这样的衡量：变化导致两部分职责代码修改是否总是同时发生，如果这两部分职责总是同时变化，则我们不需要拆分，拆分的同时也会引入复杂度。
+
+因此，仅当变化发生时，变化的轴线才有实际意义，如果没有征兆，则不需要重构，因为拆分的同时也会引入复杂性。
+
+do one thing and do it well
+
+单一职责的核心思想是：做好并只做一件事，无论是方法还是类。
+
+单一职责是最简单的原则之一，但是也是只难实践的原则之一。
+关联不同的职责在一起是我们的天性，找到并分离这些职责就是软件计真正要做的。
+
+
+#### Open/Closed Prininple
+
+![Open/Closed](( "assets/images/image-open-closed.png" | absolute_url ))
+
+开闭原则，代码对扩展开放，对修改关闭。已经发布的代码，已经有其他客员端，或者模块依赖的情况下，不应该再修改其代码改变其特性，除非是修复BUG或者重构。因为修改已经发布代码的特性，会影响依赖这部分代码的客户端或者其他模块。
+
+程序员都会有这样的经历，当新增特性或者需求变化时，我们常常通过新增参数，修改旧代码来添加新特性。随着项目的演化，我们在旧的方法里的参数越来越多，方法越来越长，类越来越大。代码的偶合度越来越大，越来越难以应对后续的需求变化。
+
+Add functionality by adding new code, not by modify old code
+
+![](( "assets/images/image-open-closed-complex.png" | absolute_url ))
+
+理想的情况下，我们应该追求只通过新增代码来添加新的特性，但在实践中，这是一个逐步演化的过程。一开始你可能很好的识别出哪些代码将会变化，但是当变化或者添加新特性时并需要改动旧代码时，我们应该重构他，把变化部分抽象出来。抽象出一组行为，成为接口或者类(一组或者一个)。请记住，仅抽象频繁变化部分，不成熟的抽象同样会引入复杂度。同样需要注意的是，接口应该是在演化过程中产生的，不应该是被设计出来的。
+
+看下一个例子：
+```java
+public void doSomething(int type){
+	if(type == 0){
+		//business 1
+	}else if(type == 1){
+		//business 2
+	}else if(type ==2){
+		//buiness 3
+	}
+}
+```
+
+上面的例子中，如果业务中，type代表的业务类型总是有变化，那么每次变化或者新增业务，则需要频繁修改这代码，带来风险，好的办法是把变化部分抽象出来，使用多态的方式实现。
+
+在实践当中，我们追求open/closed 原则，但我们很难做出完美的提前设计，准确提前预计到变化，过多的提前设计带来过度设计的坏味道。
+
+所以在实践当中，我们往往通过重构演化我们的代码，使我们的代码具有良好的open/closed原则
+
+#### Liskov Substitution priciple
+定义：subtypes must be substitutable for their base types
+
+把使用父类的引用替换成子类，都不会出现正常的问题。
+
+例子1:
+
+![lsp](( "assets/images/image-lsp-rectangle.png" | absolute_url ))
+
+如上图所示，正方形是一种特殊长方形，但是当正方形继承长方形就会违反Liskov substisution原则，
