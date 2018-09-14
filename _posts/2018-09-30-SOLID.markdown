@@ -69,7 +69,7 @@ interface Modem
 
 让我们重构成如下：
 
-！[dialog](( {{"assets/images/image-single-responsibity.png" | absolute_url}} ))
+![dialog]({{"assets/images/image-single-responsibity.png" | absolute_url}})
 
 我们两部分职责分拆到两个不同的接口，但是Modem接口还是实现了两部分职责，那么是否需要据Modem的实现也拆开，我们需要这样的衡量：变化导致两部分职责代码修改是否总是同时发生，如果这两部分职责总是同时变化，则我们不需要拆分，拆分的同时也会引入复杂度。
 
@@ -85,7 +85,7 @@ do one thing and do it well
 
 #### Open/Closed Prininple
 
-![Open/Closed](( {{"assets/images/image-open-closed.png" | absolute_url}} ))
+![Open/Closed]( {{"assets/images/image-open-closed.png" | absolute_url}} )
 
 开闭原则，代码对扩展开放，对修改关闭。已经发布的代码，已经有其他客员端，或者模块依赖的情况下，不应该再修改其代码改变其特性，除非是修复BUG或者重构。因为修改已经发布代码的特性，会影响依赖这部分代码的客户端或者其他模块。
 
@@ -93,7 +93,7 @@ do one thing and do it well
 
 Add functionality by adding new code, not by modify old code
 
-![open/closed](( {{"assets/images/image-open-closed-complex.png" | absolute_url}} ))
+![open/closed]({{"assets/images/image-open-closed-complex.png" | absolute_url}})
 
 理想的情况下，我们应该追求只通过新增代码来添加新的特性，但在实践中，这是一个逐步演化的过程。一开始你可能很好的识别出哪些代码将会变化，但是当变化或者添加新特性时并需要改动旧代码时，我们应该重构他，把变化部分抽象出来。抽象出一组行为，成为接口或者类(一组或者一个)。请记住，仅抽象频繁变化部分，不成熟的抽象同样会引入复杂度。同样需要注意的是，接口应该是在演化过程中产生的，不应该是被设计出来的。
 
@@ -123,13 +123,13 @@ public void doSomething(int type){
 
 例子1:
 
-![lsp](( {{"assets/images/image-lsp-rectangle.png" | absolute_url}} ))
+![lsp]({{"assets/images/image-lsp-rectangle.png" | absolute_url}})
 
 如上图所示，正方形是一种特殊长方形，但是当正方形继承长方形就会违反Liskov substisution原则。长方形有长和宽两个属性，正方形的长和宽相等。如果正方形继承长方形，每当正方形修改长的同时还要修改宽，则在使用父类的地方，则不可能使用子类来替换。
 
 另一个典型的例子是:removal of features
 
-![removal-of-features](( {{"assets/images/image-lsp-removal.png" | absolute_url}}))
+![removal-of-features]({{"assets/images/image-lsp-removal.png" | absolute_url}})
 
 如上面的代码片段，有一个标准的实现CURD的接口，但在种场景下你可能需要一个只读的实现，实现了标准接口，在修改，删除，更新方法上直接抛出异常，实际上是移除了多个方法，这种设计违反了LSP。
 
