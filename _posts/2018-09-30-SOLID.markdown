@@ -145,3 +145,37 @@ LSP是我们在设计抽象对象过程中的重要原则，保证我在抽象�
 
 
 #### Interface Segregation Principle
+
+Many client-specific interfaces are better than one general-purpose interface . No client should be forced to depend on methods it does not use.
+
+接口隔离原则，为多个客户端按照职责不同定义不同的接口，比使用一个通用接口要好，客户端或者说调用者应该只关心他所关心的接口，与当前调用无关的接口不应该偶合在一起。接口隔离可以解决LSP与SRP遇到的问题。
+
+接口隔离味意着组件更专注某件事情，更小。小的组件可以组合成更加复杂的系统，不同职责的接口偶合在一起使系统应对变化时更加脆弱。同时当你的接口拥有太多的接口方法，会产生过于庞大的类，导致接口与调用者之间产生有害的依赖。当调用者的需求有变化时，会影响到其他的调用者，应当把过于复杂的接口按不同的功能职责拆分成多个单位一职责的接口。
+
+在设计接口时考虑两个问题：
+
+* Who owns the interface?
+* Who defines the interface?
+
+客户端（调用者）不应该依赖不需要的接口，谁拥有接口就应该谁来定义接口，客户端拥有接口，就应该由客户端来定义接口，不应该因为设计需要或者实现类需要或者服务端的原因而定义接口，
+
+Dependency Inversion Principle
+
+* High-level modules should not depend on low-level modules . Both should depend on abstractions.
+* Abstractions should not depend on details . Details should depend on abstractions.
+
+高层次的模块和低层次的模块代码之间都不应该直接相互依赖，他们应该都依赖抽象；
+
+抽象不应该依赖实现，应该实现依赖抽象。
+
+###### 传统的依赖关系
+
+高层直接依赖底层，这种直接依赖关系是紧耦合的，底层的变动会直接影响高层的功能。
+
+![dependency-tradition]({{ "assets/images/image-dependency-tradition.png" | absolute_url}})
+
+###### 依赖倒置
+
+![dependency]({{ "assets/images/image-dependency-in.png" | absolute_url }})
+
+设计良好的面象对象的程序，其依赖关系应该象上图所示，这使得高层与底层之间的耦合度更低，这是框架设计的核心原则，框架应该有非常清晰的层次定义，每层通过一个定义清晰，受控的接口向上提供高内聚的一组服务。
