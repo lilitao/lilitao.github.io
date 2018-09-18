@@ -184,7 +184,7 @@ Dependency Inversion Principle
 
 倒置的不仅是依赖关系，也是接口所有权的倒置，客户端拥有抽象接口的所有权，接口应该由客户端来定义，服务提供者则是接口的实现与派生。如下图所示，接口由上层定义，由下层实现
 
-！[i]({{ "assets/images/image2018-6-4_13-46-1.png" | absolute_url }})
+![i]({{ "assets/images/image2018-6-4_13-46-1.png" | absolute_url }})
 
 
 ### 总结
