@@ -775,3 +775,203 @@ public class SwaggerConfig {
 通过Spring Boot的启动类启动`ErpApp`,并在浏览器输入地址：http://localhost:8080/swagger-ui.html 即可访问swagger ui主界面
 
 
+#### Ay_Aggregate 项目
+
+`Ay_Aggreate`项目的作用与`Ay_Parent`类似，是`<packaging>pom</packaging>`类型项目，不负责具体的功能代码。主要作为项目的聚合根，聚合所有的项目模块，负责一些跟聚合相关的操作和配置。
+
+例如下面要介绍的关于生成所有项目的测试覆盖率报告。我们通过`jacoco-maven-plugin`生成所有项目的测试报告，但是最早期时`jacoco-maven-plugin`只能在单个项目的target目录下生成单个项目的测试报告，但是随着复杂的多模块项目的出现，为了方面管理，我们需要把所有模块或者子项目的测试覆盖数据都聚合在同一份报告里生成，所以`jacoc-maven-plugin`插件又新增了一个`gola`：`report-aggregate` 用来把所有子项目（子模块）测试数据聚合在同一份报告里。`jacoco-maven-plugin`插件使用的测试数据是依赖插件:`maven-surefire-plugin`生成的,所以`report-aggregate`需要依赖每个单独项目下，由`jacoco-maven-plugin`集成`maven-surefire-plugin`生成的测试数据文件：`jacoco.exec`。所以关于这个数据文件的路径和名称的配置，如果不太清楚的话，就使用默认配置，如果`report-aggregate`没有找到对应的`exec`文件，生成的测试数据都错误的。
+
+ > 关于`jacoco-maven-plugin`中`report-aggregate`的官方文档，[请查看这里](https://www.eclemma.org/jacoco/trunk/doc/report-aggregate-mojo.html)
+ > 关于`report-aggregate`在多模块项目中的演化过程，[请看这里](https://github.com/jacoco/jacoco/wiki/MavenMultiModule)
+
+`Ay_Aggregate`项目结构如下：
+![aggregate]({{ "assets/images/spring-boot-ay-aggregate.png" | absolute_url }})
+
+
+`Ay_Aggreate`通过继承`Ay_Parent`获得`Ay_Parent`的所有特性，同时把所有项目配置为`Ay_Aggregate`的子模块
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.ay</groupId>
+    <artifactId>Ay_Aggregate</artifactId>
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>com.ay</groupId>
+        <artifactId>Ay_Parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.ay</groupId>
+            <artifactId>Ay_CRM</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ay</groupId>
+            <artifactId>ERP_DataAccess</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ay</groupId>
+            <artifactId>ERP_Client</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <modules>
+        <module>../Ay_ERP</module>
+        <module>../Ay_Security</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>report-aggregate</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report-aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+```
+
+在上面的代码中，需要注意的是：
+1. `packaging`类型为`pom`
+2. 通过以下配置继承`Ay_Parent`项目
+
+```xml
+<parent>
+    <groupId>com.ay</groupId>
+    <artifactId>Ay_Parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+</parent>
+```
+3. 配置测试覆盖率报告生成插件,
+
+```xml
+<plugin>
+      <groupId>org.jacoco</groupId>
+      <artifactId>jacoco-maven-plugin</artifactId>
+      <executions>
+            <execution>
+                  <id>report-aggregate</id>
+                  <phase>verify</phase>
+                   <goals>
+                       <goal>report-aggregate</goal>
+                   </goals>
+            </execution>
+       </executions>
+</plugin>
+```
+
+4. 只配置了`jacoco-maven-plugin`,暂时是不能生效生成覆盖率报告，还需要添加以下配置
+  * 添加项目到将要生成的覆盖率报告中
+
+```xml
+<dependencies>
+        <dependency>
+            <groupId>com.ay</groupId>
+            <artifactId>Ay_CRM</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ay</groupId>
+            <artifactId>ERP_DataAccess</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ay</groupId>
+            <artifactId>ERP_Client</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+```
+
+  * 把需要生成覆盖率的项目作为子模块引入
+
+```xml
+  <modules>
+        <module>../Ay_ERP</module>
+        <module>../Ay_Security</module>
+    </modules>
+```
+
+5. 上面提到`report-aggregate`需要集成`maven-surefire-plugin`来给每个单独子模块（子项目)生成测试数据:`jacoco.exec` 。所在，在`Ay_Parent`配置好`maven-surefire-plugin`和`jacoco-maven-plugin`确保每个单独的项目可以正确生成测试数据文件
+
+```xml
+ <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.18.1</version>
+                <configuration>
+                    <failIfNoTests>false</failIfNoTests>
+                    <argLine>@{surefireArgLine}</argLine>
+                    <skip>${maven.test.skip}</skip>
+                    <skipTests>${skipTests}</skipTests>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>unit-tests</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                       
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.1</version>
+                <configuration>
+                    <skip>${skipTests}</skip>
+                    <output>file</output>
+                    <append>true</append>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>pre-unit-test</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <propertyName>surefireArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+```
+
+6. 生成的测试覆盖率大概如下：
+
+![coverage-coverage]({{"assets/images/spring-boot-coverage-report-1.png" | absolute_url}})
+![coverage-coverage]({{"assets/images/spring-boot-coverage-report-2.png" | absolute_url}})
