@@ -782,9 +782,13 @@ public class SwaggerConfig {
 例如下面要介绍的关于生成所有项目的测试覆盖率报告。我们通过`jacoco-maven-plugin`生成所有项目的测试报告，但是最早期时`jacoco-maven-plugin`只能在单个项目的target目录下生成单个项目的测试报告，但是随着复杂的多模块项目的出现，为了方面管理，我们需要把所有模块或者子项目的测试覆盖数据都聚合在同一份报告里生成，所以`jacoc-maven-plugin`插件又新增了一个`gola`：`report-aggregate` 用来把所有子项目（子模块）测试数据聚合在同一份报告里。`jacoco-maven-plugin`插件使用的测试数据是依赖插件:`maven-surefire-plugin`生成的,所以`report-aggregate`需要依赖每个单独项目下，由`jacoco-maven-plugin`集成`maven-surefire-plugin`生成的测试数据文件：`jacoco.exec`。所以关于这个数据文件的路径和名称的配置，如果不太清楚的话，就使用默认配置，如果`report-aggregate`没有找到对应的`exec`文件，生成的测试数据都错误的。
 
  > 关于`jacoco-maven-plugin`中`report-aggregate`的官方文档，[请查看这里](https://www.eclemma.org/jacoco/trunk/doc/report-aggregate-mojo.html)
+
+
  > 关于`report-aggregate`在多模块项目中的演化过程，[请看这里](https://github.com/jacoco/jacoco/wiki/MavenMultiModule)
 
 `Ay_Aggregate`项目结构如下：
+
+
 ![aggregate]({{ "assets/images/spring-boot-ay-aggregate.png" | absolute_url }})
 
 
