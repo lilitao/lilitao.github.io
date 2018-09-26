@@ -975,3 +975,27 @@ public class SwaggerConfig {
 
 ![coverage-coverage]({{"assets/images/spring-boot-coverage-report-1.png" | absolute_url}})
 ![coverage-coverage]({{"assets/images/spring-boot-coverage-report-2.png" | absolute_url}})
+
+
+> 如果希望在生成的aggregate report里排除不需要测试的包或java，比如DTO包/bean包等java bean类，把`jacoco-maven-plugin`配置调整如下,加入`excludes`元素,用来拓除指定的类或者包
+
+```xml
+ <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>report-aggregate</id>
+                        <phase>verify</phase>
+                        <configuration>
+                            <excludes>
+                                <exclude>com/**/*</exclude>
+                            </excludes>
+                        </configuration>
+                        <goals>
+                            <goal>report-aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+```
