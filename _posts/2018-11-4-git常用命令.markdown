@@ -11,7 +11,7 @@ author: AndyLi
 ![]({{ "/assets/images/git-overall.png" | absolute_url }})
 
 1. 从远程仓库克隆到本地
-2. 
+
 git clone https://github.com/lilitao/spring-batch-extensions.git
 
 2. 回滚在working directory修改过，但还没有add到index的文件
