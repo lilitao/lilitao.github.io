@@ -1,0 +1,36 @@
+---
+
+layout: post
+title: git常用命令
+categories: git
+description: 记录git的常用命令
+author: AndyLi
+
+---
+
+![]({{ "/assets/images/git-overall.png" | absolute_url }})
+
+1. 从远程仓库克隆到本地
+git clone https://github.com/lilitao/spring-batch-extensions.git
+
+2. 回滚在working directory修改过，但还没有add到index的文件
+git checkout -- aa.java
+
+3. 查看所有的分枝
+git branch -a
+
+4. 查看本地分枝
+git branch
+
+5. 本地repository回滚到某一个版本
+git reset -hard HEAD~2
+
+6. 删除remote repository 上的某个分枝
+git push origin --delete xx_branch
+
+7. download remote repository 代码，但不做代码merge
+git fetch --all
+
+8. 用remote repository 的代码覆盖local repository
+git fetch --all
+git reset --hard ogigmin/master
