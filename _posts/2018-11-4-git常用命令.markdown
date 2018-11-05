@@ -10,36 +10,47 @@ author: AndyLi
 
 ![]({{ "/assets/images/git-overall.png" | absolute_url }})
 
-1. 从远程仓库克隆到本地
-
+从远程仓库克隆到本地  
 git clone https://github.com/lilitao/spring-batch-extensions.git
 
-2. 回滚在working directory修改过，但还没有add到index的文件
- 
+回滚在working directory修改过，但还没有add到index的文件   
 git checkout -- aa.java
 
-3. 查看所有的分枝
- 
+查看所有的分枝   
 git branch -a
 
-4. 查看本地分枝
- 
+查看本地分枝   
 git branch
 
-5. 本地repository回滚到某一个版本
- 
+本地repository回滚到某一个版本   
 git reset -hard HEAD~2
 
-6. 删除remote repository 上的某个分枝
-
+删除remote repository 上的某个分枝  
 git push origin --delete xx_branch
 
-7. download remote repository 代码，但不做代码merge
-
+download remote repository 代码，但不做代码merge  
 git fetch --all
 
-8. 用remote repository 的代码覆盖local repository
-
-git fetch --all
-
+用remote repository 的代码覆盖local repository  
+git fetch --all  
 git reset --hard ogigmin/master
+
+设置用户名密码  
+git config --global user.name "AndyLi"  
+git config --global user.email "43850338@qq.com"  
+
+初始化本地repository 并连接上remote repository  
+cd existing_folder  
+git init  
+git remote add origin http://ip:port/split/config.git  
+git add .   
+git commit -m "Initial commit"  
+git push -u origin master  
+
+变更repository  
+cd existing_repo  
+git remote rename origin old-origin  
+git remote add origin http://**/config.git  
+git push -u origin --all  
+git push -u origin --tags  
+
