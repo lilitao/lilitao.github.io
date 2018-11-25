@@ -1,0 +1,18 @@
+---
+
+layout: post
+date: 2018-11-17
+title: maven常用参数
+categories: maven
+description: 记录maven常用的命令使用方法
+
+---
+
+正确使用maven的参数，可以大大的方便开发过程
+
+* `-U` 强制更新依赖里的所有snapshot，在持续集成服务器上使这个参数，保存每次构建时都会到maven的公司仓库中检查是否有最新的snapshot版本。
+*  `-e` 如果构建出现异常，该参数能让Maven打印完整的stack trace，以方便分析错误原因
+*  `-Dmaven.repo.local`：如果持续集成服务器有很多任务，每个任务都会使用本地仓库，下载依赖至本地仓库，为了避免这种多线程使用本地仓库可能会引起的冲突，可以使用-Dmaven.repo.local=/home/juven/ci/foo-repo/这样的参数为每个任务分配本地仓库。
+* `-B`该参数表示让Maven使用批处理模式构建项目，能够避免一些需要人工参与交互而造成的挂起状态
+* `-DskipTests`，不执行测试用例，但编译测试用例类生成相应的class文件至target/test-classes下
+* `-Dmaven.test.skip=true`，不执行测试用例，也不编译测试用例类。

@@ -90,7 +90,7 @@ mvn liquibase:dropAll  liquibase:update
 ```bat
 cd ../POC_BE_UT/sources/COAST_PMM/PMM_Web
 
-mvn install -Dspring.boot.start=false -Dspring.boot.stop=false -Dapi.test=false
+mvn install -Dmaven.test.skip=true -Dspring.boot.start=false -Dspring.boot.stop=false -Dapi.test=false -Dspring-boot.run.profiles=prod
 ```
 
 把api test report复制到usercontent目录
