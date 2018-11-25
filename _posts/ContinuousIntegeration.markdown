@@ -90,7 +90,7 @@ mvn liquibase:dropAll  liquibase:update
 ```bat
 cd ../POC_BE_UT/sources/COAST_PMM/PMM_Web
 
-mvn install -Dmaven.test.skip=true -Dspring.boot.start=false -Dspring.boot.stop=false -Dapi.test=false -Dspring-boot.run.profiles=prod
+mvn install -Dspring.boot.start=false -Dspring.boot.stop=false -Dapi.test=false
 ```
 
 把api test report复制到usercontent目录
@@ -140,5 +140,119 @@ pipeline {
     }
 }
 
+
+```
+
+
+Granfana 配置
+
+配置Function complexity
+
+```sql
+
+ select $__time(createTime), project_name AS meas_name,countVal AS meas_value from 
+(
+SELECT dbo.[projects].[name] as project_name,
+	  [project_measures].[id]
+	  ,[metrics].name as metricsName
+      ,[value]
+      ,[metric_id] 
+      ,[text_value]
+	  ,[dbo].[f_count]([text_value],';') as countVal,
+	  dbo.[snapshots].[created_at]/1000 as createTime
+	  --into #tbl_andy_temp
+  FROM [dbo].[project_measures]
+  JOIN dbo.[projects] on dbo.[project_measures].[component_uuid] = dbo.[projects].[uuid]
+  JOIN dbo.[metrics] on dbo.[project_measures].[metric_id] = dbo.[metrics].[id]
+  Join dbo.[snapshots] on  dbo.[snapshots].[uuid] = dbo.[project_measures].[analysis_uuid]
+  
+ where dbo.[metrics].name ='function_complexity_distribution'
+ and dbo.[projects].[name] in ('COASTBP_PMM','COASTBP_NFR','COASTBP_OverAllCoverage')
+ 
+ )t 
+
+ order by project_name,createTime 
+
+
+```
+
+Duplicate line 
+
+```sql
+
+	SELECT
+		 dbo.[projects].[name]                 AS meas_name,
+		 $__time(dbo.[snapshots].[created_at] / 1000 )   ,
+		--from_unixtime(floor((dbo.[snapshots].[created_at] / 1000))) AS created_at,
+		cast(dbo.[project_measures].[value] as decimal(17,2))         AS meas_value
+		-- dbo.[metrics].[name]                  AS meas_name
+     
+	   FROM dbo.[snapshots] 
+	   JOIN dbo.[project_measures]  on dbo.[snapshots].[uuid] = dbo.[project_measures].[analysis_uuid]
+	   JOIN dbo.[projects] on dbo.[project_measures].[component_uuid] = dbo.[projects].[uuid]
+	   JOIN dbo.[metrics] on dbo.[project_measures].[metric_id] = dbo.[metrics].[id]
+	   WHERE dbo.[metrics].[name] ='duplicated_lines_density'
+	   AND dbo.[projects].[name] in  ('COASTBP_PMM','COASTBP_NFR','COASTBP_OverAllCoverage')
+	   ORDER BY dbo.[projects].[name],  dbo.[snapshots].[created_at]
+
+```
+
+coverage 
+
+```sql 
+SELECT
+		 dbo.[projects].[name]                 AS meas_name,
+		$__time(dbo.[snapshots].[created_at] / 1000) ,  -- AS time,
+		--from_unixtime(floor((dbo.[snapshots].[created_at] / 1000))) AS created_at,
+		 dbo.[project_measures].[value]       AS meas_value
+	   FROM dbo.[snapshots] 
+	   JOIN dbo.[project_measures]  on dbo.[snapshots].[uuid] = dbo.[project_measures].[analysis_uuid]
+	   JOIN dbo.[projects] on dbo.[project_measures].[component_uuid] = dbo.[projects].[uuid]
+	   JOIN dbo.[metrics] on dbo.[project_measures].[metric_id] = dbo.[metrics].[id]
+	   WHERE dbo.[metrics].[name] ='coverage'
+	   AND dbo.[projects].[name] in  ('COASTBP_PMM','COASTBP_NFR','COASTBP_OverAllCoverage')
+	   ORDER BY dbo.[projects].[name],  dbo.[snapshots].[created_at]
+
+```
+
+
+BUGS
+
+```sql 
+	SELECT
+		 dbo.[projects].[name]                 AS meas_name,
+		$__time(dbo.[snapshots].[created_at] / 1000) ,  -- AS time,
+		--from_unixtime(floor((dbo.[snapshots].[created_at] / 1000))) AS created_at,
+		cast(dbo.[project_measures].[value] as decimal(17,2))         AS meas_value
+		-- dbo.[metrics].[name]                  AS meas_name
+     
+	   FROM dbo.[snapshots] 
+	   JOIN dbo.[project_measures]  on dbo.[snapshots].[uuid] = dbo.[project_measures].[analysis_uuid]
+	   JOIN dbo.[projects] on dbo.[project_measures].[component_uuid] = dbo.[projects].[uuid]
+	   JOIN dbo.[metrics] on dbo.[project_measures].[metric_id] = dbo.[metrics].[id]
+	   WHERE dbo.[metrics].[name] ='bugs'
+	   AND dbo.[projects].[name] in  ('COASTBP_PMM','COASTBP_NFR','COASTBP_OverAllCoverage')
+	   ORDER BY dbo.[projects].[name], dbo.[snapshots].[created_at]
+
+```
+
+
+Technical debt
+
+```sql 
+	   	SELECT
+		 dbo.[projects].[name]                 AS meas_name,
+		 $__time(dbo.[snapshots].[created_at] / 1000) ,  -- AS time,
+		--from_unixtime(floor((dbo.[snapshots].[created_at] / 1000))) AS created_at,
+		cast( (dbo.[project_measures].[value]/480) as int)        AS meas_value
+		-- dbo.[metrics].[name]                  AS meas_name
+			
+	   FROM dbo.[snapshots] 
+	   JOIN dbo.[project_measures]  on dbo.[snapshots].[uuid] = dbo.[project_measures].[analysis_uuid]
+	   JOIN dbo.[projects] on dbo.[project_measures].[component_uuid] = dbo.[projects].[project_uuid]
+	   JOIN dbo.[metrics] on dbo.[project_measures].[metric_id] = dbo.[metrics].[id]
+	   WHERE dbo.[metrics].[name] ='sqale_index'
+	   AND dbo.[projects].[name] in  ('COASTBP_PMM','COASTBP_NFR')
+	   ORDER BY dbo.[projects].[name],  dbo.[snapshots].[created_at]
 
 ```
