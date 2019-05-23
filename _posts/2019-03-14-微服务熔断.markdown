@@ -2,7 +2,8 @@
 
 layout: post
 date: 2019-03-14
-catetories: 微服务器 熔断
+title: 微服务器熔断
+categories: 微服务器熔断
 description: com.netflix.zuul.exception.ZuulException: Forwarding error
 
 ---
