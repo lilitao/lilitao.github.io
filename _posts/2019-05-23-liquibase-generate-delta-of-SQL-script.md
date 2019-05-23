@@ -1,7 +1,7 @@
 ---
 layout: post
 title: liquibase generate delta of SQL script
-date: 2018-08-16
+date: 2018-05-23
 categories: liquibase 
 description:  using many db change log file for maintaining db meta-data or structure 
 
